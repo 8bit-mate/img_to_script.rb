@@ -10,7 +10,7 @@ module ImgToScript
         @operator = operator
         @right = right
         @type = :if_branch
-        
+
         super
       end
     end

@@ -8,7 +8,7 @@ module ImgToScript
       def initialize(var_name:, **)
         @var_name = var_name
         @type = :loop_end
-        
+
         super
       end
     end

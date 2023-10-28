@@ -36,7 +36,7 @@ module ImgToScript
         def _evaluate_placeholders
           @token.args.each_with_index do |e, idx|
             @args[idx] = if e.is_a?(CurrentLinePlaceholder)
-                           "PLACEHOLDER MUTHERFUKKER:#{@n_line + e.shift}"
+                           "#{@n_line + e.shift}"
                          else
                            @token.args[idx]
                          end

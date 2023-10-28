@@ -8,7 +8,7 @@ module ImgToScript
       def initialize(text:, **)
         @text = text
         @type = :remark
-        
+
         super
       end
     end

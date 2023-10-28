@@ -9,7 +9,7 @@ module ImgToScript
         @x = x
         @y = y
         @type = :draw_pixel_by_abs_coords
-        
+
         super
       end
     end

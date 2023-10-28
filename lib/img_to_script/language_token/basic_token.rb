@@ -46,7 +46,9 @@ module ImgToScript
         @separator = separator
         @require_nl = require_nl
         @sliceable = sliceable
-      end  
+
+        super()
+      end
     end
   end
 end

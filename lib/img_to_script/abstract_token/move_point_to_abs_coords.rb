@@ -9,7 +9,7 @@ module ImgToScript
         @x = x
         @y = y
         @type = :move_point_to_abs_coords
-        
+
         super
       end
     end

@@ -10,7 +10,7 @@ module ImgToScript
         @start_value = start_value
         @end_value = end_value
         @type = :loop_start
-        
+
         super
       end
     end
