@@ -8,7 +8,7 @@ module ImgToScript
 
         # MK90 BASIC v1.0 - requires "LET" keyword
         def _assign_value(token)
-          LanguageToken.new(
+          LanguageToken::BasicToken.new(
             keyword: "LET",
             args: token.expression,
             separator: "",

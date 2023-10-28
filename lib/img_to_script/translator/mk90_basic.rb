@@ -8,10 +8,10 @@ module ImgToScript
 
         private
 
-        def _translate(token_array)
+        def _translate(abstract_tokens)
           result = []
 
-          token_array.each do |token|
+          abstract_tokens.each do |token|
             result.push(_translate_token(token))
           end
 

@@ -5,7 +5,7 @@ module ImgToScript
     module MK90Basic
       module Mixin
         def _clear_screen(token)
-          LanguageToken.new(
+          LanguageToken::BasicToken.new(
             keyword: "CLS",
             args: [""],
             separator: "",
@@ -15,7 +15,7 @@ module ImgToScript
         end
 
         def _data_storage(token)
-          LanguageToken.new(
+          LanguageToken::BasicToken.new(
             keyword: "DATA",
             args: token.data,
             separator: ",",
@@ -25,7 +25,7 @@ module ImgToScript
         end
 
         def _data_read(token)
-          LanguageToken.new(
+          LanguageToken::BasicToken.new(
             keyword: "READ",
             args: token.var_list,
             separator: ",",
@@ -35,7 +35,7 @@ module ImgToScript
         end
 
         def _draw_line_by_abs_coords(token)
-          LanguageToken.new(
+          LanguageToken::BasicToken.new(
             keyword: "DRAWD",
             args: [
               token.x0,
@@ -50,7 +50,7 @@ module ImgToScript
         end
 
         def _draw_pixel_by_abs_coords(token)
-          LanguageToken.new(
+          LanguageToken::BasicToken.new(
             keyword: "DRAWH",
             args: [
               token.x,
@@ -63,7 +63,7 @@ module ImgToScript
         end
 
         def _draw_chunk_by_hex_value(token)
-          LanguageToken.new(
+          LanguageToken::BasicToken.new(
             keyword: "DRAWM",
             args: [
               token.hex_values
@@ -75,7 +75,7 @@ module ImgToScript
         end
 
         def _move_point_to_abs_coords(token)
-          LanguageToken.new(
+          LanguageToken::BasicToken.new(
             keyword: "DRAWO",
             args: [
               token.x,
@@ -88,7 +88,7 @@ module ImgToScript
         end
 
         def _go_to(token)
-          LanguageToken.new(
+          LanguageToken::BasicToken.new(
             keyword: "GOTO",
             args: [
               token.line
@@ -100,7 +100,7 @@ module ImgToScript
         end
 
         def _loop_start(token)
-          LanguageToken.new(
+          LanguageToken::BasicToken.new(
             keyword: "FOR",
             args: [
               token.var_name,
@@ -116,7 +116,7 @@ module ImgToScript
         end
 
         def _loop_end(token)
-          LanguageToken.new(
+          LanguageToken::BasicToken.new(
             keyword: "NEXT",
             args: [
               token.var_name
@@ -128,7 +128,7 @@ module ImgToScript
         end
 
         def _if_branch(token)
-          LanguageToken.new(
+          LanguageToken::BasicToken.new(
             keyword: "IF",
             args: [
               token.left,
@@ -143,7 +143,7 @@ module ImgToScript
         end
 
         def _wait(token)
-          LanguageToken.new(
+          LanguageToken::BasicToken.new(
             keyword: "WAIT",
             args: [
               token.time
@@ -155,7 +155,7 @@ module ImgToScript
         end
 
         def _remark(token)
-          LanguageToken.new(
+          LanguageToken::BasicToken.new(
             keyword: "REM",
             args: [
               token.text
