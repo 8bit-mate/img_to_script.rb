@@ -2,6 +2,7 @@
 
 require "dry/system"
 require "logger"
+require "run_length_encoding_rb"
 require "zeitwerk"
 
 require_relative "img_to_script/container"
