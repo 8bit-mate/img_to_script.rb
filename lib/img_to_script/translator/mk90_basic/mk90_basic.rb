@@ -14,6 +14,8 @@ module ImgToScript
           token_array.each do |token|
             result.push(_translate_token(token))
           end
+
+          result
         end
 
         def _translate_token(token)

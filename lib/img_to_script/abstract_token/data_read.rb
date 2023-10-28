@@ -3,11 +3,12 @@
 module ImgToScript
   module AbstractToken
     class DataRead < AbstractToken
-      attr_accessor :var_list
+      attr_reader :var_list
 
       def initialize(var_list:, **)
-        @var_list = var_list
         @type = :data_read
+        @var_list = var_list
+
         super
       end
     end

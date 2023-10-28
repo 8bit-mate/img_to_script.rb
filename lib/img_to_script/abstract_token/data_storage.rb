@@ -3,7 +3,7 @@
 module ImgToScript
   module AbstractToken
     class DataStorage < AbstractToken
-      attr_accessor :data
+      attr_reader :data
 
       def initialize(data:, **)
         @data = data

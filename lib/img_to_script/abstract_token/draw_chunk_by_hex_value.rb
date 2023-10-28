@@ -3,7 +3,7 @@
 module ImgToScript
   module AbstractToken
     class DrawChunkByHexValue < AbstractToken
-      attr_accessor :hex_values
+      attr_reader :hex_values
 
       def initialize(hex_values:, **)
         @xhex_values = Array(hex_values)

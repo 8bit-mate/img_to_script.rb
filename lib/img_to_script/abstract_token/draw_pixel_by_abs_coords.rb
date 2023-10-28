@@ -3,12 +3,13 @@
 module ImgToScript
   module AbstractToken
     class DrawPixelByAbsCoords < AbstractToken
-      attr_accessor :x, :y
+      attr_reader :x, :y
 
       def initialize(x:, y:, **)
         @x = x
         @y = y
         @type = :draw_pixel_by_abs_coords
+        
         super
       end
     end
