@@ -6,10 +6,16 @@ module ImgToScript
   #
   class Container < Dry::System::Container
     configure do |config|
+      use :zeitwerk
+
       config.root = Pathname(__dir__).join("../../")
 
       config.component_dirs.add "lib" do |dir|
         dir.namespaces.add "img_to_script", key: nil
+      end
+
+      config.inflector = Dry::Inflector.new do |inflections|
+        inflections.acronym("MK90")
       end
     end
 
