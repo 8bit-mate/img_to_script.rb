@@ -7,7 +7,7 @@ class TestImgToScript < Minitest::Test
     refute_nil ::ImgToScript::VERSION
   end
 
-  def test_it_does_something_useful
-    assert false
+  def test_container_keys_arr_is_not_empty
+    refute_empty ::ImgToScript::Container.keys
   end
 end
