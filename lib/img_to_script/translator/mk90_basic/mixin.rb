@@ -65,9 +65,7 @@ module ImgToScript
         def _draw_chunk_by_hex_value(token)
           LanguageToken::BasicToken.new(
             keyword: "DRAWM",
-            args: [
-              token.hex_values
-            ],
+            args: token.hex_values,
             separator: "",
             require_nl: token.require_nl,
             sliceable: true

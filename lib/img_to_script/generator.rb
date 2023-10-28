@@ -6,7 +6,13 @@ module ImgToScript
     # Base class for script generators.
     #
     class Generator
-      def generate(image, *); end
+      def generate(image:, x_offset: 0, y_offset: 0)
+        @image = image
+        @x_offset = x_offset
+        @y_offset = y_offset
+
+        _generate
+      end
     end
 
     private
