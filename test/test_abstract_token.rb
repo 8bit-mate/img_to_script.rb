@@ -6,7 +6,7 @@ require "rmagick/bin_magick"
 
 class TestAbstractToken < Minitest::Test
   def test_cls
-    image = Magick::BinMagick::Image.from_file(__dir__ << "/data/test_4.png")
+    image = Magick::BinMagick::Image.from_file(__dir__ << "/data/test_0.png")
 
     # let_token = ImgToScript::AbstractToken::AssignValue.new(expression: "X=X+1", require_nl: false)
     # cls_token = ImgToScript::AbstractToken::ClearScreen.new(require_nl: false)
@@ -24,7 +24,7 @@ class TestAbstractToken < Minitest::Test
 
     # p form.format(trans.translate(arr))
 
-    abs = ImgToScript::Generator::HexMask::Default.new.generate(image: image, scr_height: 64, scr_width: 120)
+    abs = ImgToScript::Generator::HexMask::Enhanced.new.generate(image: image, scr_height: 64, scr_width: 120)
     toks = ImgToScript::Language::MK90Basic::Translator::MK90Basic20.new.translate(abs)
     puts ImgToScript::Language::MK90Basic::Formatter::Minificator.new.format(toks)
   end

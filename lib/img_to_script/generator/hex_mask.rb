@@ -35,7 +35,7 @@ module ImgToScript
         #
         # Prepare the image:
         #   1. ensure that image width should be divisible by 8 (CHUNK_WIDTH);
-        #   2. ensure that image height is equal to 64 (::SCR_HEIGHT);
+        #   2. ensure that image height is equal to @scr_height;
         #   3. offset the image according to the provided @x_offset / @y_offset.
         #
         # Steps 1 & 2 are required by the DRAW/M statement's algorithm.
