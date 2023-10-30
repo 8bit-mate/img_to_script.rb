@@ -7,7 +7,7 @@ module ImgToScript
       # The aim of the minificator is to make the ouput as compact
       # as possible, and so to save space at the MPO-10 cart.
       #
-      # This formatter:
+      # The minificator:
       #   1. doesn't put spaces (as MK90's BASIC lexer ignores them);
       #   2. adds as many characters to a line as possible.
       #      This minimizes the number of CR+LF sequences.
@@ -20,8 +20,6 @@ module ImgToScript
         #
         def _append_token(token)
           @token = token
-
-          # _merge_args unless @token.sliceable
 
           _ensure_args_not_empty
 
@@ -36,7 +34,7 @@ module ImgToScript
         def _evaluate_placeholders
           @token.args.each_with_index do |e, idx|
             @args[idx] = if e.is_a?(CurrentLinePlaceholder)
-                           "#{@n_line + e.shift}"
+                           (@n_line + e.shift).to_s
                          else
                            @token.args[idx]
                          end
@@ -75,12 +73,7 @@ module ImgToScript
             return
           end
 
-          # @todo check sliceable
-
-          # +1 in the sum is for a colon between statements.
-          sum = _calc_statement_length
-
-          if sum <= @max_chars_per_line
+          if _calc_statement_length <= @max_chars_per_line
             # There is enough space in the current BASIC line to add a new keyword + the next arg. pair.
             _append_first_arg_to_current_line
           else
@@ -90,13 +83,22 @@ module ImgToScript
         end
 
         def _calc_statement_length
-          # +1 in the sum is for a colon between statements.
           if @token.sliceable
-            @current_line.length + @token.keyword.length + @next_arg.length + 1
+            _calc_sliceable_statement_length
           else
-            arg_sum = @args.join(@token.separator).length
-            @current_line.length + @token.keyword.length + arg_sum + 1
+            _calc_unsliceable_statement_length
           end
+        end
+
+        def _calc_sliceable_statement_length
+          # +1 in the sum is for a colon between statements.
+          @current_line.length + @token.keyword.length + @next_arg.length + 1
+        end
+
+        def _calc_unsliceable_statement_length
+          # +1 in the sum is for a colon between statements.
+          arg_sum = @args.join(@token.separator).length
+          @current_line.length + @token.keyword.length + arg_sum + 1
         end
 
         #
@@ -142,18 +144,6 @@ module ImgToScript
         #
         def _ensure_args_not_empty
           @token.args = [""] if @token.args.empty?
-        end
-
-        #
-        # If a statement isn't sliceable, we can merge its keyword and all the
-        # arguments into one large  @token.keyword string.
-        #
-        # When we replace statement's argument list with a single "empty" argument,
-        # because @token.args array always should have at least one empty element.
-        #
-        def _merge_args
-          @token.keyword += @token.args.join(@token.separator)
-          @token.args = [""]
         end
       end
     end

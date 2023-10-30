@@ -2,14 +2,17 @@
 
 module ImgToScript
   module AbstractToken
+    #
+    # If condition.
+    #
     class IfBranch < AbstractToken
       attr_reader :left, :operator, :right
 
       def initialize(left:, operator:, right:, **)
+        @type = :if_branch
         @left = left
         @operator = operator
         @right = right
-        @type = :if_branch
 
         super
       end

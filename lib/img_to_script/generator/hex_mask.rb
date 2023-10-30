@@ -3,6 +3,9 @@
 module ImgToScript
   module Generator
     module HexMask
+      #
+      # Base class for the hex-mask-based generators.
+      #
       class HexMask < Generator
         CHUNK_WIDTH = 8
 
@@ -60,8 +63,6 @@ module ImgToScript
           width.clamp(CHUNK_WIDTH, 128) # @todo
         end
 
-        # rubocop:disable Naming/MethodParameterName
-
         #
         # Grab a 8 x 1 rectangle from the image and convert its pixels to a binary string representation.
         #
@@ -80,8 +81,6 @@ module ImgToScript
 
           pixels.map { |pixel| pixel.to_color == "black" ? 1 : 0 }.join("")
         end
-
-        # rubocop:enable Naming/MethodParameterName
 
         #
         # Convert a string of binary values to a two-digit hex representation.

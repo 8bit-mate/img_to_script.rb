@@ -2,12 +2,15 @@
 
 module ImgToScript
   module AbstractToken
+    #
+    # Go to BASIC line.
+    #
     class GoTo < AbstractToken
       attr_reader :line
 
       def initialize(line:, **)
-        @line = line
         @type = :go_to
+        @line = line
 
         super
       end

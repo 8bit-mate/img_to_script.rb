@@ -2,6 +2,9 @@
 
 module ImgToScript
   module AbstractToken
+    #
+    # Read value(s) from an array of constants.
+    #
     class DataRead < AbstractToken
       attr_reader :var_list
 

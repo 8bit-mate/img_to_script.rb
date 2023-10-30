@@ -2,6 +2,9 @@
 
 module ImgToScript
   module AbstractToken
+    #
+    # Move point to the (x, y) position (in the absolute coordinates).
+    #
     class MovePointToAbsCoords < AbstractToken
       attr_reader :x, :y
 

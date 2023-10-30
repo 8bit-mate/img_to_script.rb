@@ -2,6 +2,9 @@
 
 module ImgToScript
   module AbstractToken
+    #
+    # Assign value to a variable.
+    #
     class AssignValue < AbstractToken
       attr_reader :expression
 

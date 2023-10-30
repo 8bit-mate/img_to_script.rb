@@ -3,6 +3,9 @@
 module ImgToScript
   module Formatter
     module MK90Basic
+      #
+      # MK90 BASIC formatters base class.
+      #
       class MK90Basic < Formatter
         attr_reader :script
 

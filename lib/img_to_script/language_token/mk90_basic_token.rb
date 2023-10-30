@@ -2,7 +2,10 @@
 
 module ImgToScript
   module LanguageToken
-    class BasicToken < LanguageToken
+    #
+    # Designed to use with the MK90 BASIC translator & formatter.
+    #
+    class MK90BasicToken < LanguageToken
       attr_accessor :keyword, :args, :separator, :require_nl, :sliceable
 
       #

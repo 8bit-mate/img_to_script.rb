@@ -2,6 +2,9 @@
 
 module ImgToScript
   module AbstractToken
+    #
+    # Stores single command in an abstract representation.
+    #
     class AbstractToken
       attr_reader :type, :require_nl
 

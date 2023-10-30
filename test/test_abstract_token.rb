@@ -4,7 +4,6 @@ require_relative "test_helper"
 
 require "rmagick/bin_magick"
 
-
 class TestAbstractToken < Minitest::Test
   def test_cls
     image = Magick::BinMagick::Image.from_file(__dir__ << "/data/test_4.png")

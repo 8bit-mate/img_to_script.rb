@@ -2,6 +2,10 @@
 
 module ImgToScript
   module Translator
+    #
+    # Translates abstract tokens to more specific target language
+    # statements.
+    #
     class Translator
       def translate(input)
         _translate(

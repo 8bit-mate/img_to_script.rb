@@ -2,6 +2,9 @@
 
 module ImgToScript
   module AbstractToken
+    #
+    # Marks loop end.
+    #
     class LoopEnd < AbstractToken
       attr_reader :var_name
 

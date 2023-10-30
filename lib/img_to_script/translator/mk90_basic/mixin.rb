@@ -3,9 +3,14 @@
 module ImgToScript
   module Translator
     module MK90Basic
+      # rubocop:disable Metrics/ModuleLength
+
+      #
+      # Shared by both MK90 BAIC v.1.0 & v.2.0.
+      #
       module Mixin
         def _clear_screen(token)
-          LanguageToken::BasicToken.new(
+          LanguageToken::MK90BasicToken.new(
             keyword: "CLS",
             args: [""],
             separator: "",
@@ -15,7 +20,7 @@ module ImgToScript
         end
 
         def _data_storage(token)
-          LanguageToken::BasicToken.new(
+          LanguageToken::MK90BasicToken.new(
             keyword: "DATA",
             args: token.data,
             separator: ",",
@@ -25,7 +30,7 @@ module ImgToScript
         end
 
         def _data_read(token)
-          LanguageToken::BasicToken.new(
+          LanguageToken::MK90BasicToken.new(
             keyword: "READ",
             args: token.var_list,
             separator: ",",
@@ -35,7 +40,7 @@ module ImgToScript
         end
 
         def _draw_line_by_abs_coords(token)
-          LanguageToken::BasicToken.new(
+          LanguageToken::MK90BasicToken.new(
             keyword: "DRAWD",
             args: [
               token.x0,
@@ -50,7 +55,7 @@ module ImgToScript
         end
 
         def _draw_pixel_by_abs_coords(token)
-          LanguageToken::BasicToken.new(
+          LanguageToken::MK90BasicToken.new(
             keyword: "DRAWH",
             args: [
               token.x,
@@ -63,7 +68,7 @@ module ImgToScript
         end
 
         def _draw_chunk_by_hex_value(token)
-          LanguageToken::BasicToken.new(
+          LanguageToken::MK90BasicToken.new(
             keyword: "DRAWM",
             args: token.hex_values,
             separator: "",
@@ -73,7 +78,7 @@ module ImgToScript
         end
 
         def _move_point_to_abs_coords(token)
-          LanguageToken::BasicToken.new(
+          LanguageToken::MK90BasicToken.new(
             keyword: "DRAWO",
             args: [
               token.x,
@@ -86,7 +91,7 @@ module ImgToScript
         end
 
         def _go_to(token)
-          LanguageToken::BasicToken.new(
+          LanguageToken::MK90BasicToken.new(
             keyword: "GOTO",
             args: [
               token.line
@@ -98,7 +103,7 @@ module ImgToScript
         end
 
         def _loop_start(token)
-          LanguageToken::BasicToken.new(
+          LanguageToken::MK90BasicToken.new(
             keyword: "FOR",
             args: [
               token.var_name,
@@ -114,7 +119,7 @@ module ImgToScript
         end
 
         def _loop_end(token)
-          LanguageToken::BasicToken.new(
+          LanguageToken::MK90BasicToken.new(
             keyword: "NEXT",
             args: [
               token.var_name
@@ -126,7 +131,7 @@ module ImgToScript
         end
 
         def _if_branch(token)
-          LanguageToken::BasicToken.new(
+          LanguageToken::MK90BasicToken.new(
             keyword: "IF",
             args: [
               token.left,
@@ -141,7 +146,7 @@ module ImgToScript
         end
 
         def _wait(token)
-          LanguageToken::BasicToken.new(
+          LanguageToken::MK90BasicToken.new(
             keyword: "WAIT",
             args: [
               token.time
@@ -153,7 +158,7 @@ module ImgToScript
         end
 
         def _remark(token)
-          LanguageToken::BasicToken.new(
+          LanguageToken::MK90BasicToken.new(
             keyword: "REM",
             args: [
               token.text
@@ -164,6 +169,8 @@ module ImgToScript
           )
         end
       end
+
+      # rubocop:enable Metrics/ModuleLength
     end
   end
 end

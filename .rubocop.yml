@@ -11,3 +11,13 @@ Style/StringLiteralsInInterpolation:
 
 Layout/LineLength:
   Max: 120
+
+
+Naming/MethodParameterName:
+  AllowedNames:
+    - x
+    - y
+    - x0
+    - x1
+    - y0
+    - y1
