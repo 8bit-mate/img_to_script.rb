@@ -42,7 +42,7 @@ module ImgToScript
         #
         def _prepare_image
           @image.extent(_new_width,
-                        64, # @todo
+                        @scr_height,
                         @x_offset * -1,
                         @y_offset * -1)
         end
@@ -51,7 +51,7 @@ module ImgToScript
         # Calculate new width for the image.
         #
         # The algorithm of the DRAW/M statement requires that image width should
-        # be divisible by 8 (CHUNK_WIDTH).If the image doesn't comply with this
+        # be divisible by 8 (CHUNK_WIDTH). If the image doesn't comply with this
         # condition, it is required to extend the image width to a nearlest number
         # n: n.remainder(CHUNK_WIDTH) == 0.
         #
@@ -60,7 +60,7 @@ module ImgToScript
         #
         def _new_width
           width = ((@image.width + @x_offset) / CHUNK_WIDTH.to_f).ceil * CHUNK_WIDTH
-          width.clamp(CHUNK_WIDTH, 128) # @todo
+          width.clamp(CHUNK_WIDTH, @scr_width)
         end
 
         #
@@ -69,7 +69,7 @@ module ImgToScript
         # @param [Magick::Image, Magick::BinMagick::Image] binary_image
         #
         # @param [Integer] x, y
-        #   A current X,Y position at the image.
+        #   A current X, Y position at the image.
         #
         # @return [String]
         #   An 8-character string of 0's and 1's. Example: "11110011"

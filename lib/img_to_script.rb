@@ -11,8 +11,6 @@ require_relative "img_to_script/version"
 # loader = Zeitwerk::Loader.for_gem
 # loader.setup
 
-# p loader
-
 module ImgToScript
   class Error < StandardError; end
   # Your code goes here...

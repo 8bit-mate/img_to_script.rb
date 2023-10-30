@@ -4,7 +4,5 @@ module ImgToScript
   #
   # Stores a target language statement.
   #
-  module LanguageToken
-    class LanguageToken; end
-  end
+  class LanguageToken; end
 end

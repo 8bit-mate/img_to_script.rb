@@ -24,8 +24,8 @@ class TestAbstractToken < Minitest::Test
 
     # p form.format(trans.translate(arr))
 
-    abs = ImgToScript::Generator::HexMask::Default.new.generate(image: image)
-    toks = ImgToScript::Translator::MK90Basic::MK90Basic10.new.translate(abs)
-    puts ImgToScript::Formatter::MK90Basic::Minificator.new.format(toks)
+    abs = ImgToScript::Generator::HexMask::Default.new.generate(image: image, scr_height: 64, scr_width: 120)
+    toks = ImgToScript::Language::MK90Basic::Translator::MK90Basic20.new.translate(abs)
+    puts ImgToScript::Language::MK90Basic::Formatter::Minificator.new.format(toks)
   end
 end
