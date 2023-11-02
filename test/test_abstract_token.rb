@@ -60,7 +60,7 @@ class TestAbstractToken < Minitest::Test
     abs = ImgToScript::Generator::RunLengthEncoding::Horizontal.new.generate(image: image, scr_height: 64,
                                                                              scr_width: 120)
 
-    abs.append(goto_token1)
+    #abs.append(goto_token1)
 
     toks = ImgToScript::Language::MK90Basic::Translator::MK90Basic10.new.translate(abs)
     puts ImgToScript::Language::MK90Basic::Formatter::Minificator.new.format(toks)

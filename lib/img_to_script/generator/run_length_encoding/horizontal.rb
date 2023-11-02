@@ -26,8 +26,25 @@ module ImgToScript
 
           @major_axis_value = @x_offset
 
-          @part_line_pattern = "DRAWDX,Y,X+S-1,Y"
-          @full_line_pattern = "DRAWDX,Y,#{@segment_size},Y"
+          @part_line_pattern = AbstractToken::DrawLineByAbsCoords.new(
+            x0: "X",
+            y0: "Y",
+            x1: AbstractToken::MathAdd.new(
+              left: "X",
+              right: "S",
+              require_nl: false
+            ),
+            y1: "Y",
+            require_nl: false
+          )
+
+          @full_line_pattern = AbstractToken::DrawLineByAbsCoords.new(
+            x0: "X",
+            y0: "Y",
+            x1: @segment_size,
+            y1: "Y",
+            require_nl: false
+          )
 
           super
         end

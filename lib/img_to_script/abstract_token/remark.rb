@@ -6,7 +6,7 @@ module ImgToScript
     # Remark - a comment.
     #
     class Remark < AbstractToken
-      attr_reader :time
+      attr_reader :text
 
       def initialize(text:, **)
         @type = :remark

@@ -24,6 +24,20 @@ module ImgToScript
             result
           end
 
+          def _abs_value(token)
+            MK90BasicToken.new(
+              keyword: "ABS",
+              args: [
+                "(",
+                _expand_args(token.expression),
+                ")"
+              ].flatten!,
+              separator: "",
+              require_nl: token.require_nl,
+              sliceable: false
+            )
+          end
+
           def _clear_screen(token)
             MK90BasicToken.new(
               keyword: "CLS",
@@ -92,6 +106,20 @@ module ImgToScript
             )
           end
 
+          def _math_add(token)
+            MK90BasicToken.new(
+              keyword: "",
+              args: _expand_args([
+                                   token.left,
+                                   "+",
+                                   token.right
+                                 ]),
+              separator: "",
+              require_nl: token.require_nl,
+              sliceable: false
+            )
+          end
+
           def _move_point_to_abs_coords(token)
             MK90BasicToken.new(
               keyword: "DRAWO",
@@ -152,7 +180,8 @@ module ImgToScript
                                    token.left,
                                    token.operator,
                                    token.right,
-                                   "THEN"
+                                   "THEN",
+                                   token.consequent
                                  ]),
               separator: "",
               require_nl: token.require_nl,

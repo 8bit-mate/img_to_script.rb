@@ -40,21 +40,23 @@ module ImgToScript
         #
         def _append_decoder
           _dec_line01
-          # _dec_line02
-          # _dec_line03
-          # _dec_line04
-          # _dec_line05
-          # _dec_line06
+          _dec_line02
+          _dec_line03
+          _dec_line04
+          _dec_line05
+          _dec_line06
         end
 
         #
         # 1-st line of the decoder procedure.
         #
-        # In this line the X & Y var's are defined. The X and Y variables are used to keep track of the current position
-        # on the screen.
+        # In this line the X & Y variables are defined. The X and Y variables
+        # are used to keep track of the current position on the screen.
         #
-        # Then the main loop starts. The loop iterates over each pixel value (represented by the variable S) in the
-        # input data and translates the RLE-encoded values into DRAW/D commands that draw lines on the screen.
+        # Then the main loop starts. The loop iterates over each pixel value
+        # (represented by the variable S) in the input data and translates the
+        # RLE-encoded values into the "draw a line" commands that draw lines on
+        # the screen.
         #
         def _dec_line01
           @tokens.append(
@@ -93,83 +95,179 @@ module ImgToScript
         #
         # 2-nd line of the decoder procedure.
         #
-        # The IF statement is used to handle cases where the line would extend beyond the bounds of the image/screen.
-        # In this case the program jumps to the 5-th line of the decoder, that handles this edge case.
+        # The IF statement is used to check cases where the line would extend
+        # beyond the bounds of the image/screen. In this case the program jumps
+        # to the 5-th line (3 lines down from the current line) of the decoder,
+        # that handles this edge case.
         #
         def _dec_line02
           @tokens.append(
             AbstractToken::IfCondition.new(
-              left: "ABS(S)+#{@major_axis_symbol}",
+              left: AbstractToken::MathAdd.new(
+                left: AbstractToken::AbsValue.new(
+                  expression: "S",
+                  require_nl: false
+                ),
+                right: @major_axis_symbol,
+                require_nl: false
+              ),
               operator: ">",
               right: @segment_size,
+              consequent: CurrentLinePlaceholder.new(3),
               require_nl: true
             )
           )
-
-          @tokens.append(
-            AbstractToken::GoTo.new(
-              shortcut_on: true,
-              require_nl: false
-            )
-          )
-
-
-          condition_args = [
-            "ABS(S)+#{@major_axis_symbol}",
-            ">",
-            @segment_size,
-            "THEN",
-            (model.formatter.n_line + model.formatter.line_step * 4).to_s
-          ]
-
-          @model.append_if(args: condition_args, require_nl: true)
         end
 
         #
         # 3-rd line of the decoder procedure.
         #
-        # Draws a line if S is a positive number. Positive numbers represent black pixels.
+        # Draws a line if S is a positive number. Positive numbers represent
+        # black pixels. Negative numbers represent white pixels.
         #
         def _dec_line03
-          condition_args = ["S>0", "THEN", @part_line_pattern]
-          @model.append_if(args: condition_args, require_nl: true)
+          @tokens.append(
+            AbstractToken::IfCondition.new(
+              left: "S",
+              operator: ">",
+              right: "0",
+              consequent: @part_line_pattern,
+              require_nl: true
+            )
+          )
         end
 
         #
         # 4-th line of the decoder procedure.
         #
-        # Updates major axis position. Ends the main loop. Jumps to the end of the program.
+        # Updates major axis position. Ends the main loop. Jumps to the end
+        # of the program.
         #
         def _dec_line04
-          @model.append_let(args: ["#{@major_axis_symbol}=#{@major_axis_symbol}+ABS(S)"], require_nl: true)
-          @model.append_next(args: %w[I])
-          @model.append_goto(args: [(@model.formatter.n_line + @model.formatter.line_step * 3).to_s])
+          @tokens.append(
+            AbstractToken::AssignValue.new(
+              left: @major_axis_symbol,
+              right: AbstractToken::MathAdd.new(
+                left: @major_axis_symbol,
+                right: AbstractToken::AbsValue.new(
+                  expression: "S",
+                  require_nl: false
+                ),
+                require_nl: false
+              ),
+              require_nl: true
+            )
+          )
+
+          @tokens.append(
+            AbstractToken::LoopEnd.new(
+              var_name: "I",
+              require_nl: false
+            )
+          )
+
+          @tokens.append(
+            AbstractToken::GoTo.new(
+              line: CurrentLinePlaceholder.new(3),
+              require_nl: false
+            )
+          )
         end
 
         #
         # 5-th line of the decoder procedure.
         #
-        # This part handles cases where the line would extend beyond the bounds of the image/screen. It draws a line
-        # from the current position up to the end of the image/screen.
+        # This part handles cases where the line would extend beyond the
+        # bounds of the image/screen. It draws a line from the current
+        # position up to the end of the image/screen.
         #
         def _dec_line05
-          @model.append_if(args: ["S>0", "THEN", @full_line_pattern], require_nl: true)
+          @tokens.append(
+            AbstractToken::IfCondition.new(
+              left: "S",
+              operator: ">",
+              right: "0",
+              consequent: @full_line_pattern,
+              require_nl: true
+            )
+          )
         end
 
         #
         # 6-th line of the decoder procedure.
         #
-        # This part handles cases where the line would extend beyond the bounds of the image/screen. It updates the
-        # current position on the screen and the run-length value S.
+        # This part handles cases where the line would extend beyond the
+        # bounds of the image/screen. It updates the current position on
+        # the screen and the run-length value S. When the program jumps
+        # back to the line length check.
         #
         def _dec_line06
-          @model.append_let(args: ["#{@minor_axis_symbol}=#{@minor_axis_symbol}+1"], require_nl: true)
+          @tokens.append(
+            AbstractToken::AssignValue.new(
+              left: @minor_axis_symbol,
+              right: AbstractToken::MathAdd.new(
+                left: @minor_axis_symbol,
+                right: 1,
+                require_nl: false
+              ),
+              require_nl: true
+            )
+          )
 
-          let_args = ["S", "=", "(", "ABS(S)", "+", @major_axis_symbol, "-", @image_size, ")", "*", "SGN(S)"]
-          @model.append_let(args: let_args)
+          sgn_tok = AbstractToken::SignFunc.new(
+            expression: "S",
+            require_nl: false
+          )
 
-          @model.append_let(args: [@major_axis_symbol, "=", @major_axis_value.to_s])
-          @model.append_goto(args: [(@model.formatter.n_line - @model.formatter.line_step * 4).to_s])
+          abs_tok = AbstractToken::AbsValue.new(
+            expression: "S",
+            require_nl: false
+          )
+
+          sum_tok = AbstractToken::MathAdd.new(
+            left: abs_tok,
+            right: @major_axis_symbol,
+            require_nl: false
+          )
+
+          sub_tok = AbstractToken::MathSub.new(
+            left: sum_tok,
+            right: @image_size,
+            require_nl: false
+          )
+
+          mult_tok = AbstractToken::MathMult.new(
+            left: [
+              AbstractToken::ParenthesisLeft.new(require_nl: false),
+              sub_tok,
+              AbstractToken::ParenthesisRight.new(require_nl: false),
+            ],
+            right: sgn_tok,
+            require_nl: false
+          )
+
+          @tokens.append(
+            AbstractToken::AssignValue.new(
+              left: "S",
+              right: mult_tok,
+              require_nl: false
+            )
+          )
+
+          @tokens.append(
+            AbstractToken::AssignValue.new(
+              left: @major_axis_symbol,
+              right: @major_axis_value,
+              require_nl: false
+            )
+          )
+
+          @tokens.append(
+            AbstractToken::GoTo.new(
+              line: CurrentLinePlaceholder.new(-4),
+              require_nl: false
+            )
+          )
         end
       end
     end

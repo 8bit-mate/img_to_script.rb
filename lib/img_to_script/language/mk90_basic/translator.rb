@@ -28,6 +28,8 @@ module ImgToScript
 
           def _translate_token(token)
             case token.type
+            when :abs_value
+              _abs_value(token)
             when :assign_value
               _assign_value(token)
             when :clear_screen
@@ -44,6 +46,8 @@ module ImgToScript
               _draw_chunk_by_hex_value(token)
             when :move_point_to_abs_coords
               _move_point_to_abs_coords(token)
+            when :math_add
+              _math_add(token)
             when :go_to
               _go_to(token)
             when :loop_start
