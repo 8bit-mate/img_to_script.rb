@@ -21,130 +21,188 @@ module ImgToScript
           #
           def _append_token(token)
             @token = token
+            @placeholders_idx = _get_placeholders_idx
 
-            _ensure_args_not_empty
+            _expand_args
 
+            if @token.sliceable
+              _process_sliceable_token
+            else
+              _process_non_sliceable_token
+            end
+          end
+
+          def _get_placeholders_idx
+            @token.args.each_index.select do |i|
+              @token.args[i].is_a?(CurrentLinePlaceholder)
+            end
+          end
+
+          def _process_sliceable_token
             @current_arg_idx = 0
-            @script.push("") if @token.require_nl && @script.last != ""
-
-            @args = Marshal.load(Marshal.dump(@token.args))
 
             _append_arg until @current_arg_idx == @args.length
           end
 
-          def _evaluate_placeholders
-            @token.args.each_with_index do |e, idx|
-              @args[idx] = if e.is_a?(CurrentLinePlaceholder)
-                            (@n_line + e.shift).to_s
-                          else
-                            @token.args[idx]
-                          end
-            end
-          end
-
-          #
-          # Append next argument to the BASIC script.
-          #
           def _append_arg
-            _evaluate_placeholders
-
             @next_arg = @args[@current_arg_idx].to_s
-            @current_line = @script[-1]
 
             if @current_arg_idx.zero?
-              # The first arg. in the list should be handled differently.
-              _handle_first_arg
+              # The first arg. should be handled differently.
+              _handle_first_sliceable_arg
             else
-              # All the rest arguments in the list are processed in a batch.
-              _handle_rest_arg
+              # All the rest arguments are processed in a batch.
+              _handle_rest_sliceable_args
             end
 
             @current_arg_idx += 1
           end
 
-          #
-          # Append the first argument of the statement.
-          #
-          # If the argument is the first in the argument list, a keyword should be added before it.
-          #
-          def _handle_first_arg
-            if @current_line.empty?
-              @script.pop
-              _append_to_new_line
-              return
-            end
-
-            if _calc_statement_length <= @max_chars_per_line
-              # There is enough space in the current BASIC line to add a new keyword + the next arg. pair.
-              _append_first_arg_to_current_line
-            else
-              # There is not enough space in the current BASIC line, create a new one.
-              _append_to_new_line
-            end
-          end
-
-          def _calc_statement_length
-            if @token.sliceable
-              _calc_sliceable_statement_length
-            else
-              _calc_unsliceable_statement_length
-            end
-          end
-
-          def _calc_sliceable_statement_length
-            # +1 in the sum is for a colon between statements.
-            @current_line.length + @token.keyword.length + @next_arg.length + 1
-          end
-
-          def _calc_unsliceable_statement_length
-            # +1 in the sum is for a colon between statements.
-            arg_sum = @args.join(@token.separator).length
-            @current_line.length + @token.keyword.length + arg_sum + 1
-          end
-
-          #
-          # Append all the rest arguments.
-          #
-          def _handle_rest_arg
-            if @current_line.length + @next_arg.length + @token.separator.length <= @max_chars_per_line
+          def _handle_rest_sliceable_args
+            if _get_current_line_content.length + @next_arg.length + @token.separator.length <= @max_chars_per_line
               # There is enough space in the current BASIC line to add a new argument.
               @script[-1] += @token.separator + @next_arg.to_s
             else
               # There is not enough space in the current BASIC line, create a new one.
-              _append_to_new_line
+              statement = "#{@token.keyword}#{@next_arg}"
+              _update_line_num
+              _append_to_new_line(statement)
             end
           end
 
           #
-          # Append a keyword + first argument pair to the current line.
-          # Current line at this point is not empty, i.e. has some
-          # prepending statements.
+          # Append the first argument of the sliceable statement.
           #
-          # Use a colon to separate a new statement from the previous one.
+          # If the argument is the first in the argument list, a keyword should be prepended.
           #
-          def _append_first_arg_to_current_line
-            @script[-1] += ":#{@token.keyword}#{@next_arg}"
+          def _handle_first_sliceable_arg
+            statement = "#{@token.keyword}#{@next_arg}"
+
+            if _get_current_line_content.empty?
+              _append_first_arg_to_current_line(statement)
+              return
+            end
+
+            if _calc_sliceable_statement_length <= @max_chars_per_line
+              # There is enough space in the current BASIC line to add a new keyword + the next arg. pair.
+              _append_first_arg_to_current_line(statement)
+            else
+              # There is not enough space in the current BASIC line, create a new one.
+              _update_line_num
+              _append_to_new_line(statement)
+            end
           end
 
-          #
-          # Append a new numbered BASIC line with the keyword + arg. pair.
-          #
-          def _append_to_new_line
-            @n_line += @line_step
+          def _append_first_arg_to_current_line(statement)
+            _append_to_current_line(statement)
+          end
+
+          def _process_non_sliceable_token
             _evaluate_placeholders
 
-            @next_arg = @args[@current_arg_idx].to_s
-
-            @script << @n_line.to_s + @token.keyword + @next_arg.to_s
+            if @token.require_nl
+              # Statement explicitly demands to be on a new line
+              _append_non_sliceable_to_new_line
+            else
+              # Statement potentially can be added to a current line
+              _try_to_append_non_sliceble_to_current_line
+            end
           end
 
-          #
-          # Some BASIC statements are just keywords without arguments, e.g.: CLS.
-          # This little hack ensures that there's always at least one "empty" argument
-          # in the argument list. And now the algorithm won't crash ;)
-          #
-          def _ensure_args_not_empty
-            @token.args = [""] if @token.args.empty?
+          def _try_to_append_non_sliceble_to_current_line
+            if _get_current_line_content.empty?
+              _append_non_sliceable_to_new_line
+              return
+            end
+
+            if _calc_non_sliceable_statement_length <= @max_chars_per_line
+              _append_non_sliceable_to_current_line
+            else
+              _append_non_sliceable_to_new_line
+            end
+          end
+
+          def _get_current_line_content
+            @script[-1] || ""
+          end
+
+          def _get_non_sliceable_statement
+            @token.keyword + @args.join(@token.separator)
+          end
+
+          def _append_non_sliceable_to_current_line
+            _append_to_current_line(_get_non_sliceable_statement)
+          end
+
+          def _append_non_sliceable_to_new_line
+            _update_line_num
+            _append_to_new_line(_get_non_sliceable_statement)
+          end
+
+          def _update_line_num
+            @n_line += 1
+
+            # Since line number has been changed, it is required to
+            # re-evaluate placeholders with the updated value.
+            _evaluate_placeholders
+          end
+
+          def _append_to_current_line(statement)
+            if @script[-1]
+              @script[-1] += ":#{statement}"
+            else
+              _update_line_num
+              _append_to_new_line(statement)
+            end
+          end
+
+          def _append_to_new_line(statement)
+            new_line = "#{_select_line_label}#{statement}"
+
+            if new_line.length > @max_chars_per_line
+              # @todo WARN
+            end
+
+            @script << new_line
+          end
+
+          def _select_line_label
+            @number_lines ? @n_line.to_s : ""
+          end
+
+          def _calc_non_sliceable_statement_length
+            # +1 in the sum is for a colon between two statements.
+            arg_sum = @args.join(@token.separator).length
+            _get_current_line_content.length + @token.keyword.length + arg_sum + 1
+          end
+
+          def _calc_sliceable_statement_length
+            # +1 in the sum is for a colon between statements.
+            _get_current_line_content.length + @token.keyword.length + @next_arg.length + 1
+          end
+
+          def _evaluate_placeholders
+            @placeholders_idx.each do |i|
+              e = @token.args[i]
+              @args[i] = (@n_line + e.shift).to_s
+            end
+          end
+
+          def _add_new_empty_line
+            @script.push("")
+          end
+
+          def _expand_args
+            @args = []
+            @token.args.each do |arg|
+              if arg.is_a?(MK90Basic::MK90BasicToken)
+                @args.append(Minificator.new.format(
+                  Array(arg), number_lines: false
+                ).first)
+              else
+                @args.append(arg)
+              end
+            end
           end
         end
       end

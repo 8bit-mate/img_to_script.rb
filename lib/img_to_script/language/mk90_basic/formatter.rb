@@ -24,8 +24,9 @@ module ImgToScript
             super()
           end
 
-          def format(basic_tokens)
-            @script = [""]
+          def format(basic_tokens, number_lines: true)
+            @number_lines = number_lines
+            @script = []
 
             basic_tokens.each do |token|
               _append_token(token)

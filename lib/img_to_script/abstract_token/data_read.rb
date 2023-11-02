@@ -10,7 +10,7 @@ module ImgToScript
 
       def initialize(var_list:, **)
         @type = :data_read
-        @var_list = var_list
+        @var_list = Array(var_list)
 
         super
       end

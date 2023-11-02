@@ -10,6 +10,20 @@ module ImgToScript
         # Shared by both MK90 BAIC v.1.0 & v.2.0.
         #
         module Mixin
+          def _expand_args(args)
+            result = []
+
+            args.each do |arg|
+              if arg.is_a?(ImgToScript::AbstractToken::AbstractToken)
+                result.push(_translate_token(arg))
+              else
+                result.push(arg)
+              end
+            end
+
+            result
+          end
+
           def _clear_screen(token)
             MK90BasicToken.new(
               keyword: "CLS",
@@ -43,12 +57,12 @@ module ImgToScript
           def _draw_line_by_abs_coords(token)
             MK90BasicToken.new(
               keyword: "DRAWD",
-              args: [
-                token.x0,
-                token.y0,
-                token.x1,
-                token.y1
-              ],
+              args: _expand_args([
+                                   token.x0,
+                                   token.y0,
+                                   token.x1,
+                                   token.y1
+                                 ]),
               separator: ",",
               require_nl: token.require_nl,
               sliceable: false
@@ -58,10 +72,10 @@ module ImgToScript
           def _draw_pixel_by_abs_coords(token)
             MK90BasicToken.new(
               keyword: "DRAWH",
-              args: [
-                token.x,
-                token.y
-              ],
+              args: _expand_args([
+                                   token.x,
+                                   token.y
+                                 ]),
               separator: ",",
               require_nl: token.require_nl,
               sliceable: false
@@ -81,10 +95,10 @@ module ImgToScript
           def _move_point_to_abs_coords(token)
             MK90BasicToken.new(
               keyword: "DRAWO",
-              args: [
-                token.x,
-                token.y
-              ],
+              args: _expand_args([
+                                   token.x,
+                                   token.y
+                                 ]),
               separator: ",",
               require_nl: token.require_nl,
               sliceable: false
@@ -94,9 +108,9 @@ module ImgToScript
           def _go_to(token)
             MK90BasicToken.new(
               keyword: "GOTO",
-              args: [
-                token.line
-              ],
+              args: _expand_args([
+                                   token.line
+                                 ]),
               separator: "",
               require_nl: token.require_nl,
               sliceable: false
@@ -106,13 +120,13 @@ module ImgToScript
           def _loop_start(token)
             MK90BasicToken.new(
               keyword: "FOR",
-              args: [
-                token.var_name,
-                "=",
-                token.start_value,
-                "TO",
-                token.end_value
-              ],
+              args: _expand_args([
+                                   token.var_name,
+                                   "=",
+                                   token.start_value,
+                                   "TO",
+                                   token.end_value
+                                 ]),
               separator: "",
               require_nl: token.require_nl,
               sliceable: false
@@ -131,15 +145,15 @@ module ImgToScript
             )
           end
 
-          def _if_branch(token)
+          def _if_condition(token)
             MK90BasicToken.new(
               keyword: "IF",
-              args: [
-                token.left,
-                token.operator,
-                token.right,
-                "THEN"
-              ],
+              args: _expand_args([
+                                   token.left,
+                                   token.operator,
+                                   token.right,
+                                   "THEN"
+                                 ]),
               separator: "",
               require_nl: token.require_nl,
               sliceable: false
@@ -149,9 +163,9 @@ module ImgToScript
           def _wait(token)
             MK90BasicToken.new(
               keyword: "WAIT",
-              args: [
-                token.time
-              ],
+              args: _expand_args([
+                                   token.time
+                                 ]),
               separator: "",
               require_nl: token.require_nl,
               sliceable: false

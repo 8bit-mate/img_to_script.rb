@@ -50,8 +50,8 @@ module ImgToScript
               _loop_start(token)
             when :loop_end
               _loop_end(token)
-            when :if_branch
-              _if_branch(token)
+            when :if_condition
+              _if_condition(token)
             when :wait
               _wait(token)
             else

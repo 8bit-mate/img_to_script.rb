@@ -6,7 +6,7 @@ require "rmagick/bin_magick"
 
 class TestAbstractToken < Minitest::Test
   def test_cls
-    image = Magick::BinMagick::Image.from_file(__dir__ << "/data/test_0.png")
+    image = Magick::BinMagick::Image.from_file(__dir__ << "/data/test_2.png")
 
     # let_token = ImgToScript::AbstractToken::AssignValue.new(expression: "X=X+1", require_nl: false)
     # cls_token = ImgToScript::AbstractToken::ClearScreen.new(require_nl: false)
@@ -24,8 +24,45 @@ class TestAbstractToken < Minitest::Test
 
     # p form.format(trans.translate(arr))
 
-    abs = ImgToScript::Generator::HexMask::Enhanced.new.generate(image: image, scr_height: 64, scr_width: 120)
-    toks = ImgToScript::Language::MK90Basic::Translator::MK90Basic20.new.translate(abs)
+    # abs = ImgToScript::Generator::RunLengthEncoding::Horizontal.new.generate(image: image, scr_height: 64, scr_width: 120)
+    # toks = ImgToScript::Language::MK90Basic::Translator::MK90Basic20.new.translate(abs)
+    # puts ImgToScript::Language::MK90Basic::Formatter::Minificator.new.format(toks)
+  end
+
+  def test_tmp
+    let_token = ImgToScript::AbstractToken::AssignValue.new(
+      left: "X",
+      # right: "****************************************************************************",
+      right: ImgToScript::AbstractToken::AssignValue.new(
+        left: "Y",
+        right: "lel",
+        require_nl: true
+      ),
+      require_nl: false
+    )
+
+    goto_token1 = ImgToScript::AbstractToken::GoTo.new(line: ImgToScript::CurrentLinePlaceholder.new(0),
+                                                       require_nl: false)
+
+    # let_token = ImgToScript::AbstractToken::AssignValue.new(
+    #   left: "X",
+    #   right: 10,
+    #   require_nl: false
+    # )
+
+    toks = ImgToScript::Language::MK90Basic::Translator::MK90Basic10.new.translate(
+      [let_token, goto_token1]
+    )
+
+    p ImgToScript::Language::MK90Basic::Formatter::Minificator.new(max_chars_per_line: 80).format(toks)
+
+    image = Magick::BinMagick::Image.from_file(__dir__ << "/data/test_0.png")
+    abs = ImgToScript::Generator::RunLengthEncoding::Horizontal.new.generate(image: image, scr_height: 64,
+                                                                             scr_width: 120)
+
+    abs.append(goto_token1)
+
+    toks = ImgToScript::Language::MK90Basic::Translator::MK90Basic10.new.translate(abs)
     puts ImgToScript::Language::MK90Basic::Formatter::Minificator.new.format(toks)
   end
 end

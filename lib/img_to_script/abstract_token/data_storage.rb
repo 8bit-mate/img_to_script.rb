@@ -10,7 +10,7 @@ module ImgToScript
 
       def initialize(data:, **)
         @type = :data_storage
-        @data = data
+        @data = Array(data)
 
         super
       end

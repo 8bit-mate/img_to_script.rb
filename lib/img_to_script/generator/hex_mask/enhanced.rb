@@ -43,8 +43,6 @@ module ImgToScript
         # Set up initional values for the instant variables.
         #
         def _init_instant_vars
-          @tokens = [] # add new tokens here
-
           @x = 0 # It is always = 0, not the x/y_offset. The reason is that
           @y = 0 # we've already applied offset in the #_prepare_image method.
 
@@ -123,7 +121,7 @@ module ImgToScript
           _clr_pending_chunks
 
           _append_start_loop(@chunk_count)
-          _append_hex_values(@chunk)
+          _append_hex_values(Array(@chunk))
           _append_end_loop
 
           _upd_rle_index
@@ -132,7 +130,7 @@ module ImgToScript
         def _append_hex_values(hex_values)
           @tokens.append(
             ImgToScript::AbstractToken::DrawChunkByHexValue.new(
-              hex_values: Array(hex_values),
+              hex_values: hex_values,
               require_nl: false
             )
           )

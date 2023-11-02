@@ -17,6 +17,8 @@ module ImgToScript
         @x_offset = x_offset
         @y_offset = y_offset
 
+        @tokens = [] # add new tokens here
+
         _generate
       end
     end

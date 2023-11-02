@@ -6,11 +6,12 @@ module ImgToScript
     # Assign value to a variable.
     #
     class AssignValue < AbstractToken
-      attr_reader :expression
+      attr_reader :left, :right
 
-      def initialize(expression:, **)
+      def initialize(left:, right:, **)
         @type = :assign_value
-        @expression = Array(expression)
+        @left = left
+        @right = right
 
         super
       end

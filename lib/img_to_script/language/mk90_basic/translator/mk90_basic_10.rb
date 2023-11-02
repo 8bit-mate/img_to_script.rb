@@ -10,11 +10,11 @@ module ImgToScript
         class MK90Basic10 < Translator
           private
 
-          # MK90 BASIC v1.0 - requires "LET" keyword
+          # MK90 BASIC v1.0 - requires the "LET" keyword
           def _assign_value(token)
             MK90BasicToken.new(
               keyword: "LET",
-              args: token.expression,
+              args: _expand_args([token.left, "=", token.right]),
               separator: "",
               require_nl: token.require_nl,
               sliceable: false
