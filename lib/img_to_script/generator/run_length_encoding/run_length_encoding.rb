@@ -7,6 +7,8 @@ module ImgToScript
       # Base class for the RLE-based script generators.
       #
       class RunLengthEncoding < Generator
+        READ_VAR = "L"
+
         private
 
         #
@@ -86,7 +88,7 @@ module ImgToScript
 
           @tokens.append(
             AbstractToken::DataRead.new(
-              var_list: "S",
+              var_list: READ_VAR,
               require_nl: false
             )
           )
@@ -105,7 +107,7 @@ module ImgToScript
             AbstractToken::IfCondition.new(
               left: AbstractToken::MathAdd.new(
                 left: AbstractToken::AbsValue.new(
-                  expression: "S",
+                  expression: READ_VAR,
                   require_nl: false
                 ),
                 right: @major_axis_symbol,
@@ -113,7 +115,7 @@ module ImgToScript
               ),
               operator: ">",
               right: @segment_size,
-              consequent: CurrentLinePlaceholder.new(3),
+              consequent: CurrentLinePlaceholder.new(4),
               require_nl: true
             )
           )
@@ -128,7 +130,7 @@ module ImgToScript
         def _dec_line03
           @tokens.append(
             AbstractToken::IfCondition.new(
-              left: "S",
+              left: READ_VAR,
               operator: ">",
               right: "0",
               consequent: @part_line_pattern,
@@ -150,7 +152,7 @@ module ImgToScript
               right: AbstractToken::MathAdd.new(
                 left: @major_axis_symbol,
                 right: AbstractToken::AbsValue.new(
-                  expression: "S",
+                  expression: READ_VAR,
                   require_nl: false
                 ),
                 require_nl: false
@@ -184,7 +186,7 @@ module ImgToScript
         def _dec_line05
           @tokens.append(
             AbstractToken::IfCondition.new(
-              left: "S",
+              left: READ_VAR,
               operator: ">",
               right: "0",
               consequent: @full_line_pattern,
@@ -215,12 +217,12 @@ module ImgToScript
           )
 
           sgn_tok = AbstractToken::SignFunc.new(
-            expression: "S",
+            expression: READ_VAR,
             require_nl: false
           )
 
           abs_tok = AbstractToken::AbsValue.new(
-            expression: "S",
+            expression: READ_VAR,
             require_nl: false
           )
 
@@ -237,18 +239,17 @@ module ImgToScript
           )
 
           mult_tok = AbstractToken::MathMult.new(
-            left: [
-              AbstractToken::ParenthesisLeft.new(require_nl: false),
-              sub_tok,
-              AbstractToken::ParenthesisRight.new(require_nl: false),
-            ],
+            left: AbstractToken::Parenthesis.new(
+              expression: sub_tok,
+              require_nl: false
+            ),
             right: sgn_tok,
             require_nl: false
           )
 
           @tokens.append(
             AbstractToken::AssignValue.new(
-              left: "S",
+              left: READ_VAR,
               right: mult_tok,
               require_nl: false
             )
@@ -264,7 +265,7 @@ module ImgToScript
 
           @tokens.append(
             AbstractToken::GoTo.new(
-              line: CurrentLinePlaceholder.new(-4),
+              line: CurrentLinePlaceholder.new(-3),
               require_nl: false
             )
           )

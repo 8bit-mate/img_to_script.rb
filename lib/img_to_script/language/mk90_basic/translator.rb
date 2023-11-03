@@ -48,10 +48,20 @@ module ImgToScript
               _move_point_to_abs_coords(token)
             when :math_add
               _math_add(token)
+            when :math_sub
+              _math_sub(token)
+            when :math_mult
+              _math_mult(token)
             when :go_to
               _go_to(token)
+            when :sign_func
+              _sign_func(token)
+            when :parenthesis
+              _parenthesis(token)
             when :loop_start
               _loop_start(token)
+            when :program_end
+              _program_end(token)
             when :loop_end
               _loop_end(token)
             when :if_condition

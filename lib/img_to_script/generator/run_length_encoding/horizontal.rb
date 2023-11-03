@@ -29,9 +29,13 @@ module ImgToScript
           @part_line_pattern = AbstractToken::DrawLineByAbsCoords.new(
             x0: "X",
             y0: "Y",
-            x1: AbstractToken::MathAdd.new(
-              left: "X",
-              right: "S",
+            x1: AbstractToken::MathSub.new(
+              left: AbstractToken::MathAdd.new(
+                left: "X",
+                right: READ_VAR,
+                require_nl: false
+              ),
+              right: "1",
               require_nl: false
             ),
             y1: "Y",

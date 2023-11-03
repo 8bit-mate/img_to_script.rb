@@ -6,7 +6,7 @@ module ImgToScript
     # Pause a program run.
     #
     class Wait < AbstractToken
-      attr_accessor :time
+      attr_reader :time
 
       def initialize(time:, **)
         @type = :wait

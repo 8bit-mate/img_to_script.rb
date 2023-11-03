@@ -20,6 +20,18 @@ module ImgToScript
         @tokens = [] # add new tokens here
 
         _generate
+
+        @tokens.prepend(
+          AbstractToken::ClearScreen.new(
+            require_nl: false
+          )
+        )
+
+        @tokens.append(
+          AbstractToken::ProgramEnd.new(
+            require_nl: true
+          )
+        )
       end
     end
 

@@ -10,22 +10,17 @@ module ImgToScript
         class Formatter < ImgToScript::Formatter
           attr_reader :script
 
-          def initialize(
-            line_offset: DEF_LINE_OFFSET,
-            line_step: DEF_LINE_STEP,
-            max_chars_per_line: MAX_CHARS_PER_LINE
-          )
-            @line_offset = line_offset
-            @line_step = line_step
-            @max_chars_per_line = max_chars_per_line
+          include Dry::Configurable
 
-            @n_line = line_offset - line_step
+          setting :line_offset, default: DEF_LINE_OFFSET
+          setting :line_step, default: DEF_LINE_STEP
+          setting :max_chars_per_line, default: MAX_CHARS_PER_LINE
+          setting :number_lines, default: true
 
-            super()
-          end
+          def format(basic_tokens)
+            _apply_config
 
-          def format(basic_tokens, number_lines: true)
-            @number_lines = number_lines
+            @n_line = @line_offset - @line_step
             @script = []
 
             basic_tokens.each do |token|
@@ -33,6 +28,15 @@ module ImgToScript
             end
 
             @script
+          end
+
+          private
+
+          def _apply_config
+            @line_offset = config.line_offset
+            @line_step = config.line_step
+            @max_chars_per_line = config.max_chars_per_line
+            @number_lines = config.number_lines
           end
         end
       end

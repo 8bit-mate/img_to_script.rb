@@ -27,11 +27,11 @@ module ImgToScript
           def _abs_value(token)
             MK90BasicToken.new(
               keyword: "ABS",
-              args: [
+              args: _expand_args([
                 "(",
-                _expand_args(token.expression),
+                token.expression,
                 ")"
-              ].flatten!,
+              ]),
               separator: "",
               require_nl: token.require_nl,
               sliceable: false
@@ -41,6 +41,16 @@ module ImgToScript
           def _clear_screen(token)
             MK90BasicToken.new(
               keyword: "CLS",
+              args: [""],
+              separator: "",
+              require_nl: token.require_nl,
+              sliceable: false
+            )
+          end
+
+          def _program_end(token)
+            MK90BasicToken.new(
+              keyword: "END",
               args: [""],
               separator: "",
               require_nl: token.require_nl,
@@ -120,6 +130,34 @@ module ImgToScript
             )
           end
 
+          def _math_sub(token)
+            MK90BasicToken.new(
+              keyword: "",
+              args: _expand_args([
+                                   token.left,
+                                   "-",
+                                   token.right
+                                 ]),
+              separator: "",
+              require_nl: token.require_nl,
+              sliceable: false
+            )
+          end
+
+          def _math_mult(token)
+            MK90BasicToken.new(
+              keyword: "",
+              args: _expand_args([
+                                   token.left,
+                                   "*",
+                                   token.right
+                                 ]),
+              separator: "",
+              require_nl: token.require_nl,
+              sliceable: false
+            )
+          end
+
           def _move_point_to_abs_coords(token)
             MK90BasicToken.new(
               keyword: "DRAWO",
@@ -155,6 +193,34 @@ module ImgToScript
                                    "TO",
                                    token.end_value
                                  ]),
+              separator: "",
+              require_nl: token.require_nl,
+              sliceable: false
+            )
+          end
+
+          def _sign_func(token)
+            MK90BasicToken.new(
+              keyword: "SGN",
+              args: _expand_args([
+                "(",
+                token.expression,
+                ")"
+              ]),
+              separator: "",
+              require_nl: token.require_nl,
+              sliceable: false
+            )
+          end
+
+          def _parenthesis(token)
+            MK90BasicToken.new(
+              keyword: "",
+              args: _expand_args([
+                "(",
+                token.expression,
+                ")"
+              ]),
               separator: "",
               require_nl: token.require_nl,
               sliceable: false

@@ -78,6 +78,13 @@ module ImgToScript
           def _handle_first_sliceable_arg
             statement = "#{@token.keyword}#{@next_arg}"
 
+            if @token.require_nl
+              # Statement explicitly demands to be on a new line
+              _update_line_num
+              _append_to_new_line(statement)
+              return
+            end
+
             if _get_current_line_content.empty?
               _append_first_arg_to_current_line(statement)
               return
@@ -184,7 +191,7 @@ module ImgToScript
           def _evaluate_placeholders
             @placeholders_idx.each do |i|
               e = @token.args[i]
-              @args[i] = (@n_line + e.shift).to_s
+              @args[i] = @n_line + e.shift * @line_step
             end
           end
 
@@ -196,12 +203,18 @@ module ImgToScript
             @args = []
             @token.args.each do |arg|
               if arg.is_a?(MK90Basic::MK90BasicToken)
-                @args.append(Minificator.new.format(
-                  Array(arg), number_lines: false
+                @args.append(_minificator.format(
+                  Array(arg)
                 ).first)
               else
                 @args.append(arg)
               end
+            end
+          end
+
+          def _minificator
+            Minificator.new.configure do |config|
+              config.number_lines = false
             end
           end
         end
