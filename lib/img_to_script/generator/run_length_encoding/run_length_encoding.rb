@@ -56,11 +56,18 @@ module ImgToScript
         # are used to keep track of the current position on the screen.
         #
         # Then the main loop starts. The loop iterates over each pixel value
-        # (represented by the variable S) in the input data and translates the
-        # RLE-encoded values into the "draw a line" commands that draw lines on
-        # the screen.
+        # (represented by the variable READ_VAR) in the input data and translates
+        # the RLE-encoded values into the "draw a line" commands that draw lines
+        # on the screen.
         #
         def _dec_line01
+          _init_x
+          _init_y
+          _start_loop
+          _read_value
+        end
+
+        def _init_x
           @tokens.append(
             AbstractToken::AssignValue.new(
               left: "X",
@@ -68,7 +75,9 @@ module ImgToScript
               require_nl: true
             )
           )
+        end
 
+        def _init_y
           @tokens.append(
             AbstractToken::AssignValue.new(
               left: "Y",
@@ -76,7 +85,9 @@ module ImgToScript
               require_nl: false
             )
           )
+        end
 
+        def _start_loop
           @tokens.append(
             AbstractToken::LoopStart.new(
               var_name: "I",
@@ -85,7 +96,9 @@ module ImgToScript
               require_nl: false
             )
           )
+        end
 
+        def _read_value
           @tokens.append(
             AbstractToken::DataRead.new(
               var_list: READ_VAR,
@@ -99,25 +112,33 @@ module ImgToScript
         #
         # The IF statement is used to check cases where the line would extend
         # beyond the bounds of the image/screen. In this case the program jumps
-        # to the 5-th line (3 lines down from the current line) of the decoder,
+        # to the 6-th line (4 lines down from the current line) of the decoder,
         # that handles this edge case.
         #
         def _dec_line02
           @tokens.append(
             AbstractToken::IfCondition.new(
-              left: AbstractToken::MathAdd.new(
-                left: AbstractToken::AbsValue.new(
-                  expression: READ_VAR,
-                  require_nl: false
-                ),
-                right: @major_axis_symbol,
-                require_nl: false
-              ),
+              left: _sum_of_current_point_and_length,
               operator: ">",
               right: @segment_size,
               consequent: CurrentLinePlaceholder.new(4),
               require_nl: true
             )
+          )
+        end
+
+        def _abs_length_value
+          AbstractToken::AbsValue.new(
+            expression: READ_VAR,
+            require_nl: false
+          )
+        end
+
+        def _sum_of_current_point_and_length
+          AbstractToken::MathAdd.new(
+            left: _abs_length_value,
+            right: @major_axis_symbol,
+            require_nl: false
           )
         end
 
@@ -146,28 +167,31 @@ module ImgToScript
         # of the program.
         #
         def _dec_line04
+          _update_current_point
+          _end_loop
+          _jump_to_the_end
+        end
+
+        def _update_current_point
           @tokens.append(
             AbstractToken::AssignValue.new(
               left: @major_axis_symbol,
-              right: AbstractToken::MathAdd.new(
-                left: @major_axis_symbol,
-                right: AbstractToken::AbsValue.new(
-                  expression: READ_VAR,
-                  require_nl: false
-                ),
-                require_nl: false
-              ),
+              right: _sum_of_current_point_and_length,
               require_nl: true
             )
           )
+        end
 
+        def _end_loop
           @tokens.append(
             AbstractToken::LoopEnd.new(
               var_name: "I",
               require_nl: false
             )
           )
+        end
 
+        def _jump_to_the_end
           @tokens.append(
             AbstractToken::GoTo.new(
               line: CurrentLinePlaceholder.new(3),
@@ -195,15 +219,14 @@ module ImgToScript
           )
         end
 
-        #
-        # 6-th line of the decoder procedure.
-        #
-        # This part handles cases where the line would extend beyond the
-        # bounds of the image/screen. It updates the current position on
-        # the screen and the run-length value S. When the program jumps
-        # back to the line length check.
-        #
-        def _dec_line06
+        def _sign_func
+          AbstractToken::SignFunc.new(
+            expression: READ_VAR,
+            require_nl: false
+          )
+        end
+
+        def _increment_minor_axis
           @tokens.append(
             AbstractToken::AssignValue.new(
               left: @minor_axis_symbol,
@@ -215,19 +238,40 @@ module ImgToScript
               require_nl: true
             )
           )
+        end
 
-          sgn_tok = AbstractToken::SignFunc.new(
-            expression: READ_VAR,
-            require_nl: false
+        def _reset_major_axis
+          @tokens.append(
+            AbstractToken::AssignValue.new(
+              left: @major_axis_symbol,
+              right: @major_axis_value,
+              require_nl: false
+            )
           )
+        end
 
-          abs_tok = AbstractToken::AbsValue.new(
-            expression: READ_VAR,
-            require_nl: false
+        def _jump_to_length_check
+          @tokens.append(
+            AbstractToken::GoTo.new(
+              line: CurrentLinePlaceholder.new(-4),
+              require_nl: false
+            )
           )
+        end
+
+        #
+        # 6-th line of the decoder procedure.
+        #
+        # This part handles cases where the line would extend beyond the
+        # bounds of the image/screen. It updates the current position on
+        # the screen and the run-length value. When it jumps back to the
+        # line length check.
+        #
+        def _dec_line06
+          _increment_minor_axis
 
           sum_tok = AbstractToken::MathAdd.new(
-            left: abs_tok,
+            left: _abs_length_value,
             right: @major_axis_symbol,
             require_nl: false
           )
@@ -243,7 +287,7 @@ module ImgToScript
               expression: sub_tok,
               require_nl: false
             ),
-            right: sgn_tok,
+            right: _sign_func,
             require_nl: false
           )
 
@@ -255,20 +299,8 @@ module ImgToScript
             )
           )
 
-          @tokens.append(
-            AbstractToken::AssignValue.new(
-              left: @major_axis_symbol,
-              right: @major_axis_value,
-              require_nl: false
-            )
-          )
-
-          @tokens.append(
-            AbstractToken::GoTo.new(
-              line: CurrentLinePlaceholder.new(-3),
-              require_nl: false
-            )
-          )
+          _reset_major_axis
+          _jump_to_length_check
         end
       end
     end

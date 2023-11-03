@@ -100,9 +100,8 @@ module ImgToScript
 
           # Reached the vertical end of the screen - re-calculate position:
           div_res = @y.div(@scr_height)
-          rem = @y.remainder(@scr_height)
           @x += CHUNK_WIDTH * div_res
-          @y = rem
+          @y = @y.remainder(@scr_height)
         end
 
         def _upd_rle_index

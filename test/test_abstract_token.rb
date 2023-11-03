@@ -57,10 +57,10 @@ class TestAbstractToken < Minitest::Test
     p ImgToScript::Language::MK90Basic::Formatter::Minificator.new.format(toks)
 
     image = Magick::BinMagick::Image.from_file(__dir__ << "/data/test_0.png")
-    abs = ImgToScript::Generator::RunLengthEncoding::Horizontal.new.generate(image: image, scr_height: 64,
-                                                                             scr_width: 120)
+    abs = ImgToScript::Generator::RunLengthEncoding::Vertical.new.generate(image: image, scr_height: 64,
+                                                                           scr_width: 120)
 
-    #abs.append(goto_token1)
+    # abs.append(goto_token1)
 
     toks = ImgToScript::Language::MK90Basic::Translator::MK90Basic10.new.translate(abs)
     puts ImgToScript::Language::MK90Basic::Formatter::Minificator.new.format(toks)

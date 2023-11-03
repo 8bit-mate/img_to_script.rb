@@ -10,10 +10,10 @@ module ImgToScript
         private
 
         def _generate
-          _transpose_image
+          _transpose
           @pixels = @image.get_pixels(0, 0, @image.width, @image.height)
           _encode_pixels
-          #_append_decoder
+          # _append_decoder
 
           @tokens
         end

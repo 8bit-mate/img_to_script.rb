@@ -28,10 +28,10 @@ module ImgToScript
             MK90BasicToken.new(
               keyword: "ABS",
               args: _expand_args([
-                "(",
-                token.expression,
-                ")"
-              ]),
+                                   "(",
+                                   token.expression,
+                                   ")"
+                                 ]),
               separator: "",
               require_nl: token.require_nl,
               sliceable: false
@@ -203,10 +203,10 @@ module ImgToScript
             MK90BasicToken.new(
               keyword: "SGN",
               args: _expand_args([
-                "(",
-                token.expression,
-                ")"
-              ]),
+                                   "(",
+                                   token.expression,
+                                   ")"
+                                 ]),
               separator: "",
               require_nl: token.require_nl,
               sliceable: false
@@ -217,10 +217,10 @@ module ImgToScript
             MK90BasicToken.new(
               keyword: "",
               args: _expand_args([
-                "(",
-                token.expression,
-                ")"
-              ]),
+                                   "(",
+                                   token.expression,
+                                   ")"
+                                 ]),
               separator: "",
               require_nl: token.require_nl,
               sliceable: false

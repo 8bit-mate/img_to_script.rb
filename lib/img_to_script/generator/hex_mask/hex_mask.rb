@@ -34,7 +34,7 @@ module ImgToScript
 
         #
         # Prepare the image:
-        #   1. ensure that image width should be divisible by 8 (CHUNK_WIDTH);
+        #   1. ensure that image width is divisible by 8 (CHUNK_WIDTH);
         #   2. ensure that image height is equal to @scr_height;
         #   3. offset the image according to the provided @x_offset / @y_offset.
         #
