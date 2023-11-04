@@ -37,8 +37,6 @@ module ImgToScript
           _init_instant_vars
           _process_rle_image
           _append_pending_chunks
-
-          @tokens
         end
 
         #
@@ -86,6 +84,8 @@ module ImgToScript
           end
         end
 
+        #
+        # Run-length encoding of the @hex_img.
         #
         # @return [Array<RunLengthEncodingRb::RLEElement>]
         #

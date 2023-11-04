@@ -14,8 +14,6 @@ module ImgToScript
           @pixels = @image.get_pixels(0, 0, @image.width, @image.height)
           _encode_pixels
           _append_decoder
-
-          @tokens
         end
 
         def _append_decoder

@@ -11,12 +11,12 @@ module ImgToScript
         private
 
         def _generate
-          [
+          @tokens.append(
             AbstractToken::DrawChunkByHexValue.new(
               hex_values: _encode_img,
               require_nl: true
             )
-          ]
+          )
         end
       end
     end

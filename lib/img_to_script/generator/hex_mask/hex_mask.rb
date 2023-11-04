@@ -18,13 +18,13 @@ module ImgToScript
         #   An encoded image, represented as an array of hex-chunks.
         #
         def _encode_img
-          binary_image = _prepare_image
+          image = _prepare_image
 
           hex_img = []
 
-          (0...binary_image.width).step(CHUNK_WIDTH).each do |x|
-            (0...binary_image.height).each do |y|
-              chunk = _grab_chunk(binary_image, x, y)
+          (0...image.width).step(CHUNK_WIDTH).each do |x|
+            (0...image.height).each do |y|
+              chunk = _grab_chunk(image, x, y)
               hex_img.push(_bin_to_hex(chunk))
             end
           end
@@ -66,7 +66,7 @@ module ImgToScript
         #
         # Grab a 8 x 1 rectangle from the image and convert its pixels to a binary string representation.
         #
-        # @param [Magick::Image, Magick::BinMagick::Image] binary_image
+        # @param [Magick::Image, Magick::BinMagick::Image] image
         #
         # @param [Integer] x, y
         #   A current X, Y position at the image.
@@ -74,10 +74,10 @@ module ImgToScript
         # @return [String]
         #   An 8-character string of 0's and 1's. Example: "11110011"
         #
-        def _grab_chunk(binary_image, x, y)
+        def _grab_chunk(image, x, y)
           chunk_width = CHUNK_WIDTH
           chunk_heigth = 1
-          pixels = binary_image.get_pixels(x, y, chunk_width, chunk_heigth)
+          pixels = image.get_pixels(x, y, chunk_width, chunk_heigth)
 
           pixels.map { |pixel| pixel.to_color == "black" ? 1 : 0 }.join("")
         end
