@@ -26,31 +26,53 @@ module ImgToScript
 
           @major_axis_value = @x_offset
 
-          @part_line_pattern = AbstractToken::DrawLineByAbsCoords.new(
+          @part_line_pattern = _part_line_pattern
+          @full_line_pattern = _full_line_pattern
+
+          super
+        end
+
+        #
+        # Part-length line, i.e. a line that fills only
+        # a part of the scan line.
+        #
+        # Formatted for the horizontal scan lines.
+        #
+        def _part_line_pattern
+          AbstractToken::DrawLineByAbsCoords.new(
             x0: "X",
             y0: "Y",
-            x1: AbstractToken::MathSub.new(
-              left: AbstractToken::MathAdd.new(
-                left: "X",
-                right: READ_VAR,
-                require_nl: false
-              ),
-              right: "1",
-              require_nl: false
-            ),
-            y1: "Y",
-            require_nl: false
+            x1: _x1_expression,
+            y1: "Y"
           )
+        end
 
-          @full_line_pattern = AbstractToken::DrawLineByAbsCoords.new(
+        #
+        # Expression to evaluate x1 point.
+        #
+        def _x1_expression
+          AbstractToken::MathSub.new(
+            left: AbstractToken::MathAdd.new(
+              left: "X",
+              right: READ_VAR
+            ),
+            right: "1"
+          )
+        end
+
+        #
+        # Full-length line pattern, i.e. a line that fills
+        # the whole scan line.
+        #
+        # Formatted for the horizontal scan lines.
+        #
+        def _full_line_pattern
+          AbstractToken::DrawLineByAbsCoords.new(
             x0: "X",
             y0: "Y",
             x1: @segment_size,
-            y1: "Y",
-            require_nl: false
+            y1: "Y"
           )
-
-          super
         end
       end
     end
