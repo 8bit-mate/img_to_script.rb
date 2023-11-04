@@ -5,9 +5,9 @@ module ImgToScript
     #
     # Marks begin of the program.
     #
-    class ProgramStart < AbstractToken
+    class ProgramBegin < AbstractToken
       def initialize(**)
-        @type = :program_start
+        @type = :program_begin
 
         super
       end

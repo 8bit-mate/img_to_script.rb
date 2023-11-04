@@ -129,8 +129,7 @@ module ImgToScript
         def _append_hex_values(hex_values)
           @tokens.append(
             ImgToScript::AbstractToken::DrawChunkByHexValue.new(
-              hex_values: hex_values,
-              require_nl: false
+              hex_values: hex_values
             )
           )
         end
@@ -140,8 +139,7 @@ module ImgToScript
             ImgToScript::AbstractToken::LoopStart.new(
               var_name: "I",
               start_value: 1,
-              end_value: end_value,
-              require_nl: false
+              end_value: end_value
             )
           )
         end
@@ -149,8 +147,7 @@ module ImgToScript
         def _append_end_loop
           @tokens.append(
             ImgToScript::AbstractToken::LoopEnd.new(
-              var_name: "I",
-              require_nl: false
+              var_name: "I"
             )
           )
         end
@@ -159,8 +156,7 @@ module ImgToScript
           @tokens.append(
             ImgToScript::AbstractToken::MovePointToAbsCoords.new(
               x: x,
-              y: y,
-              require_nl: false
+              y: y
             )
           )
         end

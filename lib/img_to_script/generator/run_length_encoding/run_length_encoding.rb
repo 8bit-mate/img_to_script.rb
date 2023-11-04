@@ -81,8 +81,7 @@ module ImgToScript
           @tokens.append(
             AbstractToken::AssignValue.new(
               left: "Y",
-              right: @y_offset,
-              require_nl: false
+              right: @y_offset
             )
           )
         end
@@ -92,8 +91,7 @@ module ImgToScript
             AbstractToken::LoopStart.new(
               var_name: "I",
               start_value: 1,
-              end_value: @run_length_data.length,
-              require_nl: false
+              end_value: @run_length_data.length
             )
           )
         end
@@ -101,8 +99,7 @@ module ImgToScript
         def _read_value
           @tokens.append(
             AbstractToken::DataRead.new(
-              var_list: READ_VAR,
-              require_nl: false
+              var_list: READ_VAR
             )
           )
         end
@@ -129,16 +126,14 @@ module ImgToScript
 
         def _abs_length_value
           AbstractToken::AbsValue.new(
-            expression: READ_VAR,
-            require_nl: false
+            expression: READ_VAR
           )
         end
 
         def _sum_of_current_point_and_length
           AbstractToken::MathAdd.new(
             left: _abs_length_value,
-            right: @major_axis_symbol,
-            require_nl: false
+            right: @major_axis_symbol
           )
         end
 
@@ -185,8 +180,7 @@ module ImgToScript
         def _end_loop
           @tokens.append(
             AbstractToken::LoopEnd.new(
-              var_name: "I",
-              require_nl: false
+              var_name: "I"
             )
           )
         end
@@ -194,8 +188,7 @@ module ImgToScript
         def _jump_to_the_end
           @tokens.append(
             AbstractToken::GoTo.new(
-              line: CurrentLinePlaceholder.new(3),
-              require_nl: false
+              line: CurrentLinePlaceholder.new(3)
             )
           )
         end
@@ -221,8 +214,7 @@ module ImgToScript
 
         def _sign_func
           AbstractToken::SignFunc.new(
-            expression: READ_VAR,
-            require_nl: false
+            expression: READ_VAR
           )
         end
 
@@ -232,8 +224,7 @@ module ImgToScript
               left: @minor_axis_symbol,
               right: AbstractToken::MathAdd.new(
                 left: @minor_axis_symbol,
-                right: 1,
-                require_nl: false
+                right: 1
               ),
               require_nl: true
             )
@@ -244,8 +235,7 @@ module ImgToScript
           @tokens.append(
             AbstractToken::AssignValue.new(
               left: @major_axis_symbol,
-              right: @major_axis_value,
-              require_nl: false
+              right: @major_axis_value
             )
           )
         end
@@ -253,8 +243,7 @@ module ImgToScript
         def _jump_to_length_check
           @tokens.append(
             AbstractToken::GoTo.new(
-              line: CurrentLinePlaceholder.new(-4),
-              require_nl: false
+              line: CurrentLinePlaceholder.new(-4)
             )
           )
         end
@@ -272,30 +261,25 @@ module ImgToScript
 
           sum_tok = AbstractToken::MathAdd.new(
             left: _abs_length_value,
-            right: @major_axis_symbol,
-            require_nl: false
+            right: @major_axis_symbol
           )
 
           sub_tok = AbstractToken::MathSub.new(
             left: sum_tok,
-            right: @image_size,
-            require_nl: false
+            right: @image_size
           )
 
           mult_tok = AbstractToken::MathMult.new(
             left: AbstractToken::Parenthesis.new(
-              expression: sub_tok,
-              require_nl: false
+              expression: sub_tok
             ),
-            right: _sign_func,
-            require_nl: false
+            right: _sign_func
           )
 
           @tokens.append(
             AbstractToken::AssignValue.new(
               left: READ_VAR,
-              right: mult_tok,
-              require_nl: false
+              right: mult_tok
             )
           )
 
