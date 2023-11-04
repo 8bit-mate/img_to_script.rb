@@ -21,6 +21,8 @@ module ImgToScript
   # the current line to a line that is above (a negative value) or
   # to a line that's behind (a positive value) of the current line.
   #
+  # Shift value is in steps.
+  #
   class CurrentLinePlaceholder
     attr_reader :shift
 

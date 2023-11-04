@@ -147,7 +147,7 @@ module ImgToScript
           end
 
           def _update_line_num
-            @n_line += 1
+            @n_line += @line_step
 
             # Since line number has been changed, it is required to
             # re-evaluate placeholders with the updated value.

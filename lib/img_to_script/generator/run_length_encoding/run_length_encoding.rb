@@ -112,7 +112,7 @@ module ImgToScript
         #
         # The IF statement is used to check cases where the line would extend
         # beyond the bounds of the image/screen. In this case the program jumps
-        # to the 6-th line (4 lines down from the current line) of the decoder,
+        # to the 5-th line (3 lines down from the current line) of the decoder,
         # that handles this edge case.
         #
         def _dec_line02
@@ -121,7 +121,7 @@ module ImgToScript
               left: _sum_of_current_point_and_length,
               operator: AbstractToken::SignGreaterThan.new,
               right: @segment_size,
-              consequent: CurrentLinePlaceholder.new(4),
+              consequent: CurrentLinePlaceholder.new(3),
               require_nl: true
             )
           )
@@ -265,7 +265,7 @@ module ImgToScript
         # This part handles cases where the line would extend beyond the
         # bounds of the image/screen. It updates the current position on
         # the screen and the run-length value. When it jumps back to the
-        # line length check.
+        # line length check (2nd line of the decoder).
         #
         def _dec_line06
           _increment_minor_axis

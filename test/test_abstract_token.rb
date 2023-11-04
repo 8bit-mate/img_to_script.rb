@@ -63,6 +63,10 @@ class TestAbstractToken < Minitest::Test
     # abs.append(goto_token1)
 
     toks = ImgToScript::Language::MK90Basic::Translator::MK90Basic10.new.translate(abs)
-    puts ImgToScript::Language::MK90Basic::Formatter::Minificator.new.format(toks)
+    form = ImgToScript::Language::MK90Basic::Formatter::Minificator.new.configure do |config|
+      config.line_step = 5
+      config.line_offset = 5
+    end
+    puts form.format(toks)
   end
 end
