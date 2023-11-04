@@ -8,7 +8,7 @@ module ImgToScript
     class AbstractToken
       attr_reader :type, :require_nl
 
-      def initialize(require_nl:, **)
+      def initialize(require_nl: false, **)
         @require_nl = require_nl
       end
     end

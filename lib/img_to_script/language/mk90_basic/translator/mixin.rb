@@ -58,6 +58,16 @@ module ImgToScript
             )
           end
 
+          def _sign_greater_than(token)
+            MK90BasicToken.new(
+              keyword: "",
+              args: [">"],
+              separator: "",
+              require_nl: token.require_nl,
+              sliceable: false
+            )
+          end
+
           def _data_storage(token)
             MK90BasicToken.new(
               keyword: "DATA",

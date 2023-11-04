@@ -54,6 +54,8 @@ module ImgToScript
               _math_mult(token)
             when :go_to
               _go_to(token)
+            when :sign_greater_than
+              _sign_greater_than(token)
             when :sign_func
               _sign_func(token)
             when :parenthesis

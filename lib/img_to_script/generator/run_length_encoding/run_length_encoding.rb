@@ -119,7 +119,7 @@ module ImgToScript
           @tokens.append(
             AbstractToken::IfCondition.new(
               left: _sum_of_current_point_and_length,
-              operator: ">",
+              operator: AbstractToken::SignGreaterThan.new,
               right: @segment_size,
               consequent: CurrentLinePlaceholder.new(4),
               require_nl: true
@@ -211,8 +211,8 @@ module ImgToScript
           @tokens.append(
             AbstractToken::IfCondition.new(
               left: READ_VAR,
-              operator: ">",
-              right: "0",
+              operator: AbstractToken::SignGreaterThan.new,
+              right: 0,
               consequent: @full_line_pattern,
               require_nl: true
             )
