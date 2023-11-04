@@ -10,6 +10,13 @@ module ImgToScript
         # Shared by both MK90 BAIC v.1.0 & v.2.0.
         #
         module Mixin
+          #
+          # Some tokens can have nested tokens in their arguments, e.g.:
+          # LET X = ABS(X + L)
+          #
+          # The method 'expands' such arguments by recursively calling
+          # the _translate_token method.
+          #
           def _expand_args(args)
             result = []
 
@@ -24,9 +31,46 @@ module ImgToScript
             result
           end
 
-          def _abs_value(token)
+          #
+          # Math. operation that has a left part, a right part
+          # and the operator between the parts.
+          #
+          # @param [AbstractToken] token
+          #
+          # @param [String] operator
+          #   E.g.: "+", "-", "*", "/"
+          #
+          # @return [MK90BasicToken]
+          #
+          def _math_operation(token, operator)
             MK90BasicToken.new(
-              keyword: "ABS",
+              keyword: "",
+              args: _expand_args([
+                                   token.left,
+                                   operator,
+                                   token.right
+                                 ]),
+              separator: "",
+              require_nl: token.require_nl,
+              sliceable: false
+            )
+          end
+
+          #
+          # Function with expression that's wrapped in parentheses.
+          # E.g.: ABS(ex), SGN(ex). Keyword can be empty, in that case
+          # only parentheses will be added: (ex).
+          #
+          # @param [AbstractToken] token
+          #
+          # @param [String] keyword
+          #   E.g.: "ABS", "SGN".
+          #
+          # @return [MK90BasicToken]
+          #
+          def _function(token, keyword)
+            MK90BasicToken.new(
+              keyword: keyword,
               args: _expand_args([
                                    "(",
                                    token.expression,
@@ -36,6 +80,10 @@ module ImgToScript
               require_nl: token.require_nl,
               sliceable: false
             )
+          end
+
+          def _abs_value(token)
+            _function(token, "ABS")
           end
 
           def _clear_screen(token)
@@ -127,45 +175,15 @@ module ImgToScript
           end
 
           def _math_add(token)
-            MK90BasicToken.new(
-              keyword: "",
-              args: _expand_args([
-                                   token.left,
-                                   "+",
-                                   token.right
-                                 ]),
-              separator: "",
-              require_nl: token.require_nl,
-              sliceable: false
-            )
+            _math_operation(token, "+")
           end
 
           def _math_sub(token)
-            MK90BasicToken.new(
-              keyword: "",
-              args: _expand_args([
-                                   token.left,
-                                   "-",
-                                   token.right
-                                 ]),
-              separator: "",
-              require_nl: token.require_nl,
-              sliceable: false
-            )
+            _math_operation(token, "-")
           end
 
           def _math_mult(token)
-            MK90BasicToken.new(
-              keyword: "",
-              args: _expand_args([
-                                   token.left,
-                                   "*",
-                                   token.right
-                                 ]),
-              separator: "",
-              require_nl: token.require_nl,
-              sliceable: false
-            )
+            _math_operation(token, "*")
           end
 
           def _move_point_to_abs_coords(token)
@@ -210,31 +228,11 @@ module ImgToScript
           end
 
           def _sign_func(token)
-            MK90BasicToken.new(
-              keyword: "SGN",
-              args: _expand_args([
-                                   "(",
-                                   token.expression,
-                                   ")"
-                                 ]),
-              separator: "",
-              require_nl: token.require_nl,
-              sliceable: false
-            )
+            _function(token, "SGN")
           end
 
           def _parenthesis(token)
-            MK90BasicToken.new(
-              keyword: "",
-              args: _expand_args([
-                                   "(",
-                                   token.expression,
-                                   ")"
-                                 ]),
-              separator: "",
-              require_nl: token.require_nl,
-              sliceable: false
-            )
+            _function(token, "")
           end
 
           def _loop_end(token)

@@ -8,6 +8,7 @@ module ImgToScript
       #
       class RunLengthEncoding < Generator
         READ_VAR = "L"
+        LOOP_VAR = "I"
 
         private
 
@@ -89,7 +90,7 @@ module ImgToScript
         def _start_loop
           @tokens.append(
             AbstractToken::LoopStart.new(
-              var_name: "I",
+              var_name: LOOP_VAR,
               start_value: 1,
               end_value: @run_length_data.length
             )
@@ -180,7 +181,7 @@ module ImgToScript
         def _end_loop
           @tokens.append(
             AbstractToken::LoopEnd.new(
-              var_name: "I"
+              var_name: LOOP_VAR
             )
           )
         end

@@ -29,6 +29,8 @@ module ImgToScript
         MIN_REP_CHUNKS = 16   # min. number of the non-white repeating chunks that could be replaced with a loop.
         MIN_REP_WH_CHUNKS = 9 # min. number of the white repeating chunks that that could be replaced with a DRAW/O.
 
+        LOOP_VAR = "I"
+
         private
 
         def _generate
@@ -137,7 +139,7 @@ module ImgToScript
         def _append_start_loop(end_value)
           @tokens.append(
             ImgToScript::AbstractToken::LoopStart.new(
-              var_name: "I",
+              var_name: LOOP_VAR,
               start_value: 1,
               end_value: end_value
             )
@@ -147,7 +149,7 @@ module ImgToScript
         def _append_end_loop
           @tokens.append(
             ImgToScript::AbstractToken::LoopEnd.new(
-              var_name: "I"
+              var_name: LOOP_VAR
             )
           )
         end
