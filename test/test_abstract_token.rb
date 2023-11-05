@@ -56,8 +56,8 @@ class TestAbstractToken < Minitest::Test
 
     p ImgToScript::Language::MK90Basic::Formatter::Minificator.new.format(toks)
 
-    image = Magick::BinMagick::Image.from_file(__dir__ << "/data/test_0.png")
-    abs = ImgToScript::Generator::RunLengthEncoding::Vertical.new.generate(image: image, scr_height: 64,
+    image = Magick::BinMagick::Image.from_file(__dir__ << "/data/test_2.png")
+    abs = ImgToScript::Generator::Segmental::DirectDraw::Horizontal.new.generate(image: image, scr_height: 64,
                                                                            scr_width: 120)
 
     # abs.append(goto_token1)
@@ -65,7 +65,7 @@ class TestAbstractToken < Minitest::Test
     toks = ImgToScript::Language::MK90Basic::Translator::MK90Basic10.new.translate(abs)
     form = ImgToScript::Language::MK90Basic::Formatter::Minificator.new.configure do |config|
       config.line_step = 1
-      config.line_offset = 5
+      config.line_offset = 1
     end
     puts form.format(toks)
   end

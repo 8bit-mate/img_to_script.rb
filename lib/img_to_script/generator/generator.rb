@@ -12,6 +12,12 @@ module ImgToScript
       setting :y_offset, default: 0
       setting :clear_screen, default: true
       setting :pause_program, default: true
+      setting :program_begin, default: false
+      setting :program_end, default: false
+
+      LOOP_VAR = "I"
+      LOOP_COUNT = 100
+      WAIT_TIME = 1024
 
       #
       # Generate abstract tokens that render the image.
@@ -35,6 +41,8 @@ module ImgToScript
         @y_offset = config.y_offset
 
         _generate_tokens
+
+        @tokens
       end
 
       private
@@ -42,11 +50,11 @@ module ImgToScript
       def _generate_tokens
         @tokens = [] # append new tokens here
 
-        _program_begin
+        _program_begin if config.program_begin
         _clear_screen if config.clear_screen
         _generate
         _program_pause if config.pause_program
-        _program_end
+        _program_end if config.program_end
       end
 
       #
@@ -94,7 +102,36 @@ module ImgToScript
       # Append a sub-routine to pause the program.
       #
       def _program_pause
-        # @todo
+        _loop_start
+        _wait
+        _loop_end
+      end
+
+      def _loop_start
+        @tokens.append(
+          AbstractToken::LoopStart.new(
+            start_value: 1,
+            end_value: LOOP_COUNT,
+            var_name: LOOP_VAR,
+            require_nl: true
+          )
+        )
+      end
+
+      def _wait
+        @tokens.append(
+          AbstractToken::Wait.new(
+            time: WAIT_TIME
+          )
+        )
+      end
+
+      def _loop_end
+        @tokens.append(
+          AbstractToken::LoopEnd.new(
+            var_name: LOOP_VAR
+          )
+        )
       end
     end
   end
