@@ -14,7 +14,7 @@ module ImgToScript
           def _assign_value(token)
             MK90BasicToken.new(
               keyword: "",
-              args: _expand_args([token.left, "=", token.right]),
+              args: _translate_arguments([token.left, "=", token.right]),
               separator: "",
               require_nl: token.require_nl,
               sliceable: false

@@ -56,8 +56,8 @@ class TestAbstractToken < Minitest::Test
 
     p ImgToScript::Language::MK90Basic::Formatter::Minificator.new.format(toks)
 
-    image = Magick::BinMagick::Image.from_file(__dir__ << "/data/test_2.png")
-    abs = ImgToScript::Generator::Segmental::DirectDraw::Horizontal.new.generate(image: image, scr_height: 64,
+    image = Magick::BinMagick::Image.from_file(__dir__ << "/data/test_0.png")
+    abs = ImgToScript::Generator::Segmental::DataReadDraw::Vertical.new.generate(image: image, scr_height: 64,
                                                                            scr_width: 120)
 
     # abs.append(goto_token1)

@@ -7,9 +7,6 @@ module ImgToScript
       # Base class for the RLE-based script generators.
       #
       class RunLengthEncoding < Generator
-        READ_VAR = "L"
-        LOOP_VAR = "I"
-
         private
 
         #
@@ -71,7 +68,7 @@ module ImgToScript
         def _init_x
           @tokens.append(
             AbstractToken::AssignValue.new(
-              left: "X",
+              left: X_LBL,
               right: @x_offset,
               require_nl: true
             )
@@ -81,7 +78,7 @@ module ImgToScript
         def _init_y
           @tokens.append(
             AbstractToken::AssignValue.new(
-              left: "Y",
+              left: Y_LBL,
               right: @y_offset
             )
           )
@@ -149,7 +146,7 @@ module ImgToScript
             AbstractToken::IfCondition.new(
               left: READ_VAR,
               operator: ">",
-              right: "0",
+              right: 0,
               consequent: @part_line_pattern,
               require_nl: true
             )

@@ -15,8 +15,7 @@ module ImgToScript
       setting :program_begin, default: false
       setting :program_end, default: false
 
-      LOOP_VAR = "I"
-      LOOP_COUNT = 100
+      WAIT_LOOP_COUNT = 100
       WAIT_TIME = 1024
 
       #
@@ -111,7 +110,7 @@ module ImgToScript
         @tokens.append(
           AbstractToken::LoopStart.new(
             start_value: 1,
-            end_value: LOOP_COUNT,
+            end_value: WAIT_LOOP_COUNT,
             var_name: LOOP_VAR,
             require_nl: true
           )

@@ -6,9 +6,9 @@ module ImgToScript
       module DirectDraw
         #
         # Base class for the 'direct' draw method. Segments are being drawed by
-        # calling the DRAW/H and the DRAW/D statements, and the coordinates of
-        # the segments are *directly* hard-coded as the statement's arguments.
-        # Hence the name.
+        # calling the 'draw a pixel' and the 'draw a line' statements, and the
+        # coordinates of the segments are *directly* hard-coded as the statement's
+        # arguments. Hence the name.
         #
         class DirectDraw < Segmental
           private
@@ -16,8 +16,8 @@ module ImgToScript
           #
           # Convert a chunk of black pixel(s) to a respective BASIC statement:
           #
-          # - for a sequence of black pixels: append DRAW/D statement (a line);
-          # - for a single black pixel: append DRAW/H statement (a dot).
+          # - for a sequence of black pixels: append 'draw a line' statement;
+          # - for a single black pixel: append 'draw a dot' statement.
           #
           # @param [Integer] count
           #   Run-length of the pixel block.

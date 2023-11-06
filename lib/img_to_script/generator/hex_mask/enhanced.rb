@@ -29,8 +29,6 @@ module ImgToScript
         MIN_REP_CHUNKS = 16   # min. number of the non-white repeating chunks that could be replaced with a loop.
         MIN_REP_WH_CHUNKS = 9 # min. number of the white repeating chunks that that could be replaced with a DRAW/O.
 
-        LOOP_VAR = "I"
-
         private
 
         def _generate

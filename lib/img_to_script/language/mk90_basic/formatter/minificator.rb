@@ -23,7 +23,7 @@ module ImgToScript
             @token = token
             @placeholders_idx = _get_placeholders_idx
 
-            _expand_args
+            _translate_arguments
 
             if @token.sliceable
               _process_sliceable_token
@@ -199,7 +199,7 @@ module ImgToScript
             @script.push("")
           end
 
-          def _expand_args
+          def _translate_arguments
             @args = []
             @token.args.each do |arg|
               if arg.is_a?(MK90Basic::MK90BasicToken)

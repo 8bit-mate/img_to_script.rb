@@ -11,29 +11,50 @@ module ImgToScript
         #
         module Mixin
           #
-          # Some tokens can have nested tokens in their arguments, e.g.:
-          # LET X = ABS(X + L)
+          # Some abstract tokens can have nested tokens as their
+          # arguments. Other tokens can have Symbols as placeholders
+          # for the variables names. And other arguments should be
+          # passed as is (e.g. Integers and Strings).
           #
-          # The method 'expands' such arguments by recursively calling
-          # the _translate_token method.
+          # The method translates an array of arguments of mixed types
           #
-          def _expand_args(args)
+          # @param [Array<Object>] args
+          #   Original arguments.
+          #
+          # @return [Array<Object>]
+          #   Translated arguments.
+          #
+          def _translate_arguments(args)
             result = []
 
             args.each do |arg|
-              if arg.is_a?(ImgToScript::AbstractToken::AbstractToken)
-                result.push(_translate_token(arg))
-              else
-                result.push(arg)
-              end
+              result.push(_translate_arg(arg))
             end
 
             result
           end
 
           #
-          # Math. operation that has a left part, a right part
-          # and the operator between the parts.
+          # Translate an argument based on its type.
+          #
+          # @param [Object] arg
+          #
+          # @return [Object]
+          #
+          def _translate_arg(arg)
+            case arg
+            when ImgToScript::AbstractToken::AbstractToken
+              _translate_token(arg)
+            when Symbol
+              arg.to_s.upcase
+            else
+              arg
+            end
+          end
+
+          #
+          # Math. operation that has a left part, a right part, and
+          # the operator between the parts.
           #
           # @param [AbstractToken] token
           #
@@ -45,11 +66,11 @@ module ImgToScript
           def _math_operation(token, operator)
             MK90BasicToken.new(
               keyword: "",
-              args: _expand_args([
-                                   token.left,
-                                   operator,
-                                   token.right
-                                 ]),
+              args: _translate_arguments([
+                                           token.left,
+                                           operator,
+                                           token.right
+                                         ]),
               separator: "",
               require_nl: token.require_nl,
               sliceable: false
@@ -71,11 +92,33 @@ module ImgToScript
           def _function(token, keyword)
             MK90BasicToken.new(
               keyword: keyword,
-              args: _expand_args([
-                                   "(",
-                                   token.expression,
-                                   ")"
-                                 ]),
+              args: _translate_arguments([
+                                           "(",
+                                           token.expression,
+                                           ")"
+                                         ]),
+              separator: "",
+              require_nl: token.require_nl,
+              sliceable: false
+            )
+          end
+
+          #
+          # Single keyword statements.
+          #
+          # A statement that consists only from a keyword, and doesn't
+          # take arguments, e.g.: CLS, END, STOP, etc.
+          #
+          # @param [AbstractToken] token
+          #
+          # @param [String] keyword
+          #
+          # @return [MK90BasicToken]
+          #
+          def _single_keyword(token, keyword)
+            MK90BasicToken.new(
+              keyword: keyword,
+              args: [""],
               separator: "",
               require_nl: token.require_nl,
               sliceable: false
@@ -87,23 +130,11 @@ module ImgToScript
           end
 
           def _clear_screen(token)
-            MK90BasicToken.new(
-              keyword: "CLS",
-              args: [""],
-              separator: "",
-              require_nl: token.require_nl,
-              sliceable: false
-            )
+            _single_keyword(token, "CLS")
           end
 
           def _program_end(token)
-            MK90BasicToken.new(
-              keyword: "END",
-              args: [""],
-              separator: "",
-              require_nl: token.require_nl,
-              sliceable: false
-            )
+            _single_keyword(token, "END")
           end
 
           def _sign_greater_than(token)
@@ -129,7 +160,7 @@ module ImgToScript
           def _data_read(token)
             MK90BasicToken.new(
               keyword: "READ",
-              args: token.var_list,
+              args: _translate_arguments(token.var_list),
               separator: ",",
               require_nl: token.require_nl,
               sliceable: false
@@ -139,12 +170,12 @@ module ImgToScript
           def _draw_line_by_abs_coords(token)
             MK90BasicToken.new(
               keyword: "DRAWD",
-              args: _expand_args([
-                                   token.x0,
-                                   token.y0,
-                                   token.x1,
-                                   token.y1
-                                 ]),
+              args: _translate_arguments([
+                                           token.x0,
+                                           token.y0,
+                                           token.x1,
+                                           token.y1
+                                         ]),
               separator: ",",
               require_nl: token.require_nl,
               sliceable: false
@@ -154,10 +185,10 @@ module ImgToScript
           def _draw_pixel_by_abs_coords(token)
             MK90BasicToken.new(
               keyword: "DRAWH",
-              args: _expand_args([
-                                   token.x,
-                                   token.y
-                                 ]),
+              args: _translate_arguments([
+                                           token.x,
+                                           token.y
+                                         ]),
               separator: ",",
               require_nl: token.require_nl,
               sliceable: false
@@ -189,10 +220,10 @@ module ImgToScript
           def _move_point_to_abs_coords(token)
             MK90BasicToken.new(
               keyword: "DRAWO",
-              args: _expand_args([
-                                   token.x,
-                                   token.y
-                                 ]),
+              args: _translate_arguments([
+                                           token.x,
+                                           token.y
+                                         ]),
               separator: ",",
               require_nl: token.require_nl,
               sliceable: false
@@ -202,9 +233,9 @@ module ImgToScript
           def _go_to(token)
             MK90BasicToken.new(
               keyword: "GOTO",
-              args: _expand_args([
-                                   token.line
-                                 ]),
+              args: _translate_arguments([
+                                           token.line
+                                         ]),
               separator: "",
               require_nl: token.require_nl,
               sliceable: false
@@ -214,13 +245,13 @@ module ImgToScript
           def _loop_start(token)
             MK90BasicToken.new(
               keyword: "FOR",
-              args: _expand_args([
-                                   token.var_name,
-                                   "=",
-                                   token.start_value,
-                                   "TO",
-                                   token.end_value
-                                 ]),
+              args: _translate_arguments([
+                                           token.var_name,
+                                           "=",
+                                           token.start_value,
+                                           "TO",
+                                           token.end_value
+                                         ]),
               separator: "",
               require_nl: token.require_nl,
               sliceable: false
@@ -238,9 +269,11 @@ module ImgToScript
           def _loop_end(token)
             MK90BasicToken.new(
               keyword: "NEXT",
-              args: [
-                token.var_name
-              ],
+              args: _translate_arguments(
+                [
+                  token.var_name
+                ]
+              ),
               separator: "",
               require_nl: token.require_nl,
               sliceable: false
@@ -250,13 +283,13 @@ module ImgToScript
           def _if_condition(token)
             MK90BasicToken.new(
               keyword: "IF",
-              args: _expand_args([
-                                   token.left,
-                                   token.operator,
-                                   token.right,
-                                   "THEN",
-                                   token.consequent
-                                 ]),
+              args: _translate_arguments([
+                                           token.left,
+                                           token.operator,
+                                           token.right,
+                                           "THEN",
+                                           token.consequent
+                                         ]),
               separator: "",
               require_nl: token.require_nl,
               sliceable: false
@@ -266,9 +299,9 @@ module ImgToScript
           def _wait(token)
             MK90BasicToken.new(
               keyword: "WAIT",
-              args: _expand_args([
-                                   token.time
-                                 ]),
+              args: _translate_arguments([
+                                           token.time
+                                         ]),
               separator: "",
               require_nl: token.require_nl,
               sliceable: false

@@ -19,8 +19,8 @@ module ImgToScript
           @image_size = @image.width + @x_offset
           @segment_size = @image_size - 1
 
-          @major_axis_symbol = "X"
-          @minor_axis_symbol = "Y"
+          @major_axis_symbol = X_LBL
+          @minor_axis_symbol = Y_LBL
 
           @major_axis_value = @x_offset
 
@@ -38,10 +38,10 @@ module ImgToScript
         #
         def _part_line_pattern
           AbstractToken::DrawLineByAbsCoords.new(
-            x0: "X",
-            y0: "Y",
+            x0: X_LBL,
+            y0: Y_LBL,
             x1: _x1_expression,
-            y1: "Y"
+            y1: Y_LBL
           )
         end
 
@@ -51,10 +51,10 @@ module ImgToScript
         def _x1_expression
           AbstractToken::MathSub.new(
             left: AbstractToken::MathAdd.new(
-              left: "X",
+              left: X_LBL,
               right: READ_VAR
             ),
-            right: "1"
+            right: 1
           )
         end
 
@@ -66,10 +66,10 @@ module ImgToScript
         #
         def _full_line_pattern
           AbstractToken::DrawLineByAbsCoords.new(
-            x0: "X",
-            y0: "Y",
+            x0: X_LBL,
+            y0: Y_LBL,
             x1: @segment_size,
-            y1: "Y"
+            y1: Y_LBL
           )
         end
       end

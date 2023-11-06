@@ -10,7 +10,7 @@ module ImgToScript
 
       def initialize(expression:, **)
         @type = :sign_func
-        @expression = Array(expression)
+        @expression = expression
 
         super
       end
