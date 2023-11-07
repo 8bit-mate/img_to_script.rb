@@ -9,7 +9,7 @@ module ImgToScript
       attr_reader :left, :operator, :right, :consequent
 
       def initialize(left:, operator:, right:, consequent:, **)
-        @type = :if_condition
+        @type = AbsTokenType::IF_CONDITION
         @left = left
         @operator = operator
         @right = right

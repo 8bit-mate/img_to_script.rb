@@ -5,11 +5,11 @@ module ImgToScript
     #
     # Absolute value (modulus).
     #
-    class AbsValue < AbstractToken
+    class AbsFunc < AbstractToken
       attr_reader :expression
 
       def initialize(expression:, **)
-        @type = :abs_value
+        @type = AbsTokenType::ABS_FUNC
         @expression = expression
 
         super

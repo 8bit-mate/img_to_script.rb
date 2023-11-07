@@ -43,7 +43,7 @@ module ImgToScript
           #
           def _translate_arg(arg)
             case arg
-            when ImgToScript::AbstractToken::AbstractToken
+            when AbstractToken::AbstractToken
               _translate_token(arg)
             when Symbol
               arg.to_s.upcase

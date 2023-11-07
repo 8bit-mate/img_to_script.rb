@@ -3,13 +3,13 @@
 module ImgToScript
   module AbstractToken
     #
-    # Start a loop.
+    # Begin a loop.
     #
-    class LoopStart < AbstractToken
+    class LoopBegin < AbstractToken
       attr_reader :var_name, :start_value, :end_value
 
       def initialize(var_name:, start_value:, end_value:, **)
-        @type = :loop_start
+        @type = AbsTokenType::LOOP_BEGIN
         @var_name = var_name
         @start_value = start_value
         @end_value = end_value

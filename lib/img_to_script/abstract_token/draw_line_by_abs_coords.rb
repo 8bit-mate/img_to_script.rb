@@ -9,7 +9,7 @@ module ImgToScript
       attr_reader :x0, :y0, :x1, :y1
 
       def initialize(x0:, y0:, x1:, y1:, **)
-        @type = :draw_line_by_abs_coords
+        @type = AbsTokenType::DRAW_LINE_BY_ABS_COORDS
         @x0 = x0
         @y0 = y0
         @x1 = x1

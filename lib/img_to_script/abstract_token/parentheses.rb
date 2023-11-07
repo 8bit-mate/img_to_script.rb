@@ -3,13 +3,13 @@
 module ImgToScript
   module AbstractToken
     #
-    # Wrap an expression into parenthesis.
+    # Wrap an expression into parentheses.
     #
-    class Parenthesis < AbstractToken
+    class Parentheses < AbstractToken
       attr_reader :expression
 
       def initialize(expression:, **)
-        @type = :parenthesis
+        @type = AbsTokenType::PARENTHESES
         @expression = expression
 
         super

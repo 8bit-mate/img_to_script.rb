@@ -28,7 +28,7 @@ module ImgToScript
 
         def _append_data(arr)
           @tokens.append(
-            ImgToScript::AbstractToken::DataStorage.new(
+            AbstractToken::DataStore.new(
               data: arr,
               require_nl: true
             )
@@ -65,43 +65,6 @@ module ImgToScript
           _read_value
         end
 
-        def _init_x
-          @tokens.append(
-            AbstractToken::AssignValue.new(
-              left: X_LBL,
-              right: @x_offset,
-              require_nl: true
-            )
-          )
-        end
-
-        def _init_y
-          @tokens.append(
-            AbstractToken::AssignValue.new(
-              left: Y_LBL,
-              right: @y_offset
-            )
-          )
-        end
-
-        def _start_loop
-          @tokens.append(
-            AbstractToken::LoopStart.new(
-              var_name: LOOP_VAR,
-              start_value: 1,
-              end_value: @run_length_data.length
-            )
-          )
-        end
-
-        def _read_value
-          @tokens.append(
-            AbstractToken::DataRead.new(
-              var_list: READ_VAR
-            )
-          )
-        end
-
         #
         # 2-nd line of the decoder procedure.
         #
@@ -119,19 +82,6 @@ module ImgToScript
               consequent: CurrentLinePlaceholder.new(3),
               require_nl: true
             )
-          )
-        end
-
-        def _abs_length_value
-          AbstractToken::AbsValue.new(
-            expression: READ_VAR
-          )
-        end
-
-        def _sum_of_current_point_and_length
-          AbstractToken::MathAdd.new(
-            left: _abs_length_value,
-            right: @major_axis_symbol
           )
         end
 
@@ -165,6 +115,90 @@ module ImgToScript
           _jump_to_the_end
         end
 
+        #
+        # 5-th line of the decoder procedure.
+        #
+        # This part handles cases where the line would extend beyond the
+        # bounds of the image/screen. It draws a line from the current
+        # position up to the end of the image/screen.
+        #
+        def _dec_line05
+          @tokens.append(
+            AbstractToken::IfCondition.new(
+              left: READ_VAR,
+              operator: AbstractToken::SignGreaterThan.new,
+              right: 0,
+              consequent: @full_line_pattern,
+              require_nl: true
+            )
+          )
+        end
+
+        #
+        # 6-th line of the decoder procedure.
+        #
+        # This part handles cases where the line would extend beyond the
+        # bounds of the image/screen. It updates the current position on
+        # the screen and the run-length value. When it jumps back to the
+        # line length check (2nd line of the decoder).
+        #
+        def _dec_line06
+          _increment_minor_axis
+          _update_read_variable
+          _reset_major_axis
+          _jump_to_length_check
+        end
+
+        def _init_x
+          @tokens.append(
+            AbstractToken::AssignValue.new(
+              left: X_LBL,
+              right: @x_offset,
+              require_nl: true
+            )
+          )
+        end
+
+        def _init_y
+          @tokens.append(
+            AbstractToken::AssignValue.new(
+              left: Y_LBL,
+              right: @y_offset
+            )
+          )
+        end
+
+        def _start_loop
+          @tokens.append(
+            AbstractToken::LoopBegin.new(
+              var_name: LOOP_VAR,
+              start_value: 1,
+              end_value: @run_length_data.length
+            )
+          )
+        end
+
+        def _read_value
+          @tokens.append(
+            AbstractToken::DataRead.new(
+              var_list: READ_VAR
+            )
+          )
+        end
+
+        def _abs_length_value
+          AbstractToken::AbsFunc.new(
+            expression: READ_VAR
+          )
+        end
+
+        def _sum_of_current_point_and_length
+          AbstractToken::MathAdd.new(
+            left: _abs_length_value,
+            right: @major_axis_symbol
+          )
+        end
+
         def _update_current_point
           @tokens.append(
             AbstractToken::AssignValue.new(
@@ -187,25 +221,6 @@ module ImgToScript
           @tokens.append(
             AbstractToken::GoTo.new(
               line: CurrentLinePlaceholder.new(3)
-            )
-          )
-        end
-
-        #
-        # 5-th line of the decoder procedure.
-        #
-        # This part handles cases where the line would extend beyond the
-        # bounds of the image/screen. It draws a line from the current
-        # position up to the end of the image/screen.
-        #
-        def _dec_line05
-          @tokens.append(
-            AbstractToken::IfCondition.new(
-              left: READ_VAR,
-              operator: AbstractToken::SignGreaterThan.new,
-              right: 0,
-              consequent: @full_line_pattern,
-              require_nl: true
             )
           )
         end
@@ -246,43 +261,36 @@ module ImgToScript
           )
         end
 
-        #
-        # 6-th line of the decoder procedure.
-        #
-        # This part handles cases where the line would extend beyond the
-        # bounds of the image/screen. It updates the current position on
-        # the screen and the run-length value. When it jumps back to the
-        # line length check (2nd line of the decoder).
-        #
-        def _dec_line06
-          _increment_minor_axis
-
-          sum_tok = AbstractToken::MathAdd.new(
+        def _sum_token
+          AbstractToken::MathAdd.new(
             left: _abs_length_value,
             right: @major_axis_symbol
           )
+        end
 
-          sub_tok = AbstractToken::MathSub.new(
-            left: sum_tok,
+        def _sub_token
+          AbstractToken::MathSub.new(
+            left: _sum_token,
             right: @image_size
           )
+        end
 
-          mult_tok = AbstractToken::MathMult.new(
-            left: AbstractToken::Parenthesis.new(
-              expression: sub_tok
+        def _mult_token
+          AbstractToken::MathMult.new(
+            left: AbstractToken::Parentheses.new(
+              expression: _sub_token
             ),
             right: _sign_func
           )
+        end
 
+        def _update_read_variable
           @tokens.append(
             AbstractToken::AssignValue.new(
               left: READ_VAR,
-              right: mult_tok
+              right: _mult_token
             )
           )
-
-          _reset_major_axis
-          _jump_to_length_check
         end
       end
     end

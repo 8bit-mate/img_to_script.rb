@@ -8,9 +8,6 @@ require "zeitwerk"
 require_relative "img_to_script/container"
 require_relative "img_to_script/version"
 
-# loader = Zeitwerk::Loader.for_gem
-# loader.setup
-
 module ImgToScript
   class Error < StandardError; end
   # Your code goes here...

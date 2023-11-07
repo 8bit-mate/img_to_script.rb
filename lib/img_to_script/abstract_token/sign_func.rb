@@ -9,7 +9,7 @@ module ImgToScript
       attr_reader :expression
 
       def initialize(expression:, **)
-        @type = :sign_func
+        @type = AbsTokenType::SIGN_FUNC
         @expression = expression
 
         super

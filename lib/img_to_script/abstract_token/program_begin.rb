@@ -7,7 +7,7 @@ module ImgToScript
     #
     class ProgramBegin < AbstractToken
       def initialize(**)
-        @type = :program_begin
+        @type = AbsTokenType::PROGRAM_BEGIN
 
         super
       end

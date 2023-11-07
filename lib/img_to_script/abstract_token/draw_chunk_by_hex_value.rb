@@ -9,7 +9,7 @@ module ImgToScript
       attr_reader :hex_values
 
       def initialize(hex_values:, **)
-        @type = :draw_chunk_by_hex_value
+        @type = AbsTokenType::DRAW_CHUNK_BY_HEX_VALUE
         @hex_values = Array(hex_values)
 
         super

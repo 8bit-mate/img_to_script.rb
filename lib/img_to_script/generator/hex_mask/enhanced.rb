@@ -4,30 +4,40 @@ module ImgToScript
   module Generator
     module HexMask
       #
-      # Generates image rendering script using the DRAW/M statement with the 'enhancements'.
+      # Generates image rendering script using the DRAW/M statement with
+      # the 'enhancements'.
       #
-      # To save space at the MPO-10 cart, it's possible to replacelong sequences of repeating chunks with a shorter
-      # (in terms of number of chars required to store the statement) code, e.g.:
+      # To save space at the MPO-10 cart, it's possible to replacelong
+      # sequences of repeating chunks with a shorter
+      # (in terms of number of chars required to store the statement) code,
+      # e.g.:
       #
-      # xxDRAWMFFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFF  // 43 bytes -- 16 repeating chunks of 'AA'.
-      # xxDRAWMFF:FORI=1TO16:DRAWMAA:NEXTI:DRAWMFF   // 42 bytes -- repeating chunks were replaced with a loop.
+      # xxDRAWMFFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFF
+      # // 43 bytes -- 16 x 'AA'.
+      # xxDRAWMFF:FORI=1TO16:DRAWMAA:NEXTI:DRAWMFF
+      # // 42 bytes -- repeating chunks were replaced with a loop.
       #
-      # Same principle could be applied to eliminate long sequences of white pixels, e.g.:
-      # xxDRAWMFF00000000000000000000FF  // 31 bytes -- 10 repeating chunks of '00'.
-      # xxDRAWMFF:DRAWOxxx,yy:DRAWMFF    // 29 bytes -- replaced with a manual shift.
+      # Same principle could be applied to eliminate long sequences of white
+      # pixels, e.g.:
+      # xxDRAWMFF00000000000000000000FF
+      # // 31 bytes -- 10 x '00'.
+      # xxDRAWMFF:DRAWOxxx,yy:DRAWMFF
+      # // 29 bytes -- replaced with a manual shift.
       #
       # The algorithm is:
       # 1. apply RLE to the array of hex chunks (DRAW/M arguments);
-      # 2. loop through the array of run-lengths: take an element (a 'chunk') and check if it's run-length is larger
-      #    than an estimated value (MIN_REP_CHUNKS or MIN_REP_WH_CHUNKS);
-      # 3. if true: add pending chunks to the BASIC code; then append a FOR-NEXT loop or DRAW/O.
-      #    Clear pending chunks array and continue to loop through the array of run-lengths.
+      # 2. loop through the array of run-lengths: take an element (a 'chunk') and
+      #    heck if it's run-length is larger than an estimated value (MIN_REP_CHUNKS
+      #    or MIN_REP_WH_CHUNKS);
+      # 3. if true: add pending chunks to the BASIC code; then append a FOR-NEXT loop or
+      #    DRAW/O. Clear pending chunks array and continue to loop through the array of
+      #    run-lengths.
       # 4. otherwise: add current chunk to the array of pending chunks;
       # 5. after the loop: add pending chunks.
       #
       class Enhanced < HexMask
-        MIN_REP_CHUNKS = 16   # min. number of the non-white repeating chunks that could be replaced with a loop.
-        MIN_REP_WH_CHUNKS = 9 # min. number of the white repeating chunks that that could be replaced with a DRAW/O.
+        MIN_REP_CHUNKS = 16
+        MIN_REP_WH_CHUNKS = 9
 
         private
 
@@ -128,7 +138,7 @@ module ImgToScript
 
         def _append_hex_values(hex_values)
           @tokens.append(
-            ImgToScript::AbstractToken::DrawChunkByHexValue.new(
+            AbstractToken::DrawChunkByHexValue.new(
               hex_values: hex_values
             )
           )
@@ -136,7 +146,7 @@ module ImgToScript
 
         def _append_start_loop(end_value)
           @tokens.append(
-            ImgToScript::AbstractToken::LoopStart.new(
+            AbstractToken::LoopBegin.new(
               var_name: LOOP_VAR,
               start_value: 1,
               end_value: end_value
@@ -146,7 +156,7 @@ module ImgToScript
 
         def _append_end_loop
           @tokens.append(
-            ImgToScript::AbstractToken::LoopEnd.new(
+            AbstractToken::LoopEnd.new(
               var_name: LOOP_VAR
             )
           )
@@ -154,7 +164,7 @@ module ImgToScript
 
         def _append_move_point(x, y)
           @tokens.append(
-            ImgToScript::AbstractToken::MovePointToAbsCoords.new(
+            AbstractToken::MovePointToAbsCoords.new(
               x: x,
               y: y
             )

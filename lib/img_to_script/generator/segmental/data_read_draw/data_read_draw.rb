@@ -38,7 +38,7 @@ module ImgToScript
 
           def _append_data
             @tokens.append(
-              AbstractToken::DataStorage.new(
+              AbstractToken::DataStore.new(
                 data: @data,
                 require_nl: true
               )
@@ -47,7 +47,7 @@ module ImgToScript
 
           def _loop_start
             @tokens.append(
-              AbstractToken::LoopStart.new(
+              AbstractToken::LoopBegin.new(
                 start_value: 1,
                 end_value: @n_black_segments,
                 var_name: LOOP_VAR,

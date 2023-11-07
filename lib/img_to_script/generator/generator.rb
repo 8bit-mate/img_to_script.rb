@@ -12,8 +12,8 @@ module ImgToScript
       setting :y_offset, default: 0
       setting :clear_screen, default: true
       setting :pause_program, default: true
-      setting :program_begin, default: false
-      setting :program_end, default: false
+      setting AbsTokenType::PROGRAM_BEGIN, default: false
+      setting AbsTokenType::PROGRAM_END, default: false
 
       WAIT_LOOP_COUNT = 100
       WAIT_TIME = 1024
@@ -108,7 +108,7 @@ module ImgToScript
 
       def _loop_start
         @tokens.append(
-          AbstractToken::LoopStart.new(
+          AbstractToken::LoopBegin.new(
             start_value: 1,
             end_value: WAIT_LOOP_COUNT,
             var_name: LOOP_VAR,

@@ -8,7 +8,7 @@ module ImgToScript
   #
   # When a generator generates an abstract token, it doesn't know
   # anything about the current line or its number yet. It is only
-  # when a formatter gets into the game, this values can be
+  # when a formatter starts to format the code, this values can be
   # calculated.
   #
   # Thus, at the generation step a placeholder is being used to mark
@@ -21,7 +21,7 @@ module ImgToScript
   # the current line to a line that is above (a negative value) or
   # to a line that's behind (a positive value) of the current line.
   #
-  # Shift value is in steps.
+  # Shift value is in steps, i.e. works as a coefficient.
   #
   class CurrentLinePlaceholder
     attr_reader :shift

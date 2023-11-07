@@ -9,7 +9,7 @@ module ImgToScript
       attr_reader :time
 
       def initialize(time:, **)
-        @type = :wait
+        @type = AbsTokenType::WAIT
         @time = time
 
         super

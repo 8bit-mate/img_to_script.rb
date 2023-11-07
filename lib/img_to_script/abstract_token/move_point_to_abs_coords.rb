@@ -11,7 +11,7 @@ module ImgToScript
       def initialize(x:, y:, **)
         @x = x
         @y = y
-        @type = :move_point_to_abs_coords
+        @type = AbsTokenType::MOVE_POINT_TO_ABS_COORDS
 
         super
       end

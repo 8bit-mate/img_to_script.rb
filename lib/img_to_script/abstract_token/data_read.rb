@@ -9,7 +9,7 @@ module ImgToScript
       attr_reader :var_list
 
       def initialize(var_list:, **)
-        @type = :data_read
+        @type = AbsTokenType::DATA_READ
         @var_list = Array(var_list)
 
         super

@@ -10,7 +10,7 @@ module ImgToScript
 
       def initialize(var_name:, **)
         @var_name = var_name
-        @type = :loop_end
+        @type = AbsTokenType::LOOP_END
 
         super
       end

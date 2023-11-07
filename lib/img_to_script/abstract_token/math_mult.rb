@@ -9,7 +9,7 @@ module ImgToScript
       attr_reader :left, :right
 
       def initialize(left:, right:, **)
-        @type = :math_mult
+        @type = AbsTokenType::MATH_MULT
         @left = left
         @right = right
 

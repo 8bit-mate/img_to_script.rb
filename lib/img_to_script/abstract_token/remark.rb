@@ -9,7 +9,7 @@ module ImgToScript
       attr_reader :text
 
       def initialize(text:, **)
-        @type = :remark
+        @type = AbsTokenType::REMARK
         @text = text
 
         super

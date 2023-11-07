@@ -7,7 +7,7 @@ module ImgToScript
     #
     class SignGreaterThan < AbstractToken
       def initialize(**)
-        @type = :sign_greater_than
+        @type = AbsTokenType::SIGN_GREATER_THAN
 
         super
       end

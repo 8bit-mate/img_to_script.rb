@@ -5,11 +5,11 @@ module ImgToScript
     #
     # Store array of contants.
     #
-    class DataStorage < AbstractToken
+    class DataStore < AbstractToken
       attr_reader :data
 
       def initialize(data:, **)
-        @type = :data_storage
+        @type = AbsTokenType::DATA_STORE
         @data = Array(data)
 
         super

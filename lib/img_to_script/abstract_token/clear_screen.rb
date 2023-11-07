@@ -7,7 +7,7 @@ module ImgToScript
     #
     class ClearScreen < AbstractToken
       def initialize(**)
-        @type = :clear_screen
+        @type = AbsTokenType::CLEAR_SCREEN
 
         super
       end

@@ -28,47 +28,47 @@ module ImgToScript
 
           def _translate_token(token)
             case token.type
-            when :abs_value
+            when AbsTokenType::ABS_FUNC
               _abs_value(token)
-            when :assign_value
+            when AbsTokenType::ASSIGN_VALUE
               _assign_value(token)
-            when :clear_screen
+            when AbsTokenType::CLEAR_SCREEN
               _clear_screen(token)
-            when :data_storage
+            when AbsTokenType::DATA_STORE
               _data_storage(token)
-            when :data_read
+            when AbsTokenType::DATA_READ
               _data_read(token)
-            when :draw_line_by_abs_coords
+            when AbsTokenType::DRAW_LINE_BY_ABS_COORDS
               _draw_line_by_abs_coords(token)
-            when :draw_pixel_by_abs_coords
+            when AbsTokenType::DRAW_PIXEL_BY_ABS_COORDS
               _draw_pixel_by_abs_coords(token)
-            when :draw_chunk_by_hex_value
+            when AbsTokenType::DRAW_CHUNK_BY_HEX_VALUE
               _draw_chunk_by_hex_value(token)
-            when :move_point_to_abs_coords
+            when AbsTokenType::MOVE_POINT_TO_ABS_COORDS
               _move_point_to_abs_coords(token)
-            when :math_add
+            when AbsTokenType::MATH_ADD
               _math_add(token)
-            when :math_sub
+            when AbsTokenType::MATH_SUB
               _math_sub(token)
-            when :math_mult
+            when AbsTokenType::MATH_MULT
               _math_mult(token)
-            when :go_to
+            when AbsTokenType::GO_TO
               _go_to(token)
-            when :sign_greater_than
+            when AbsTokenType::SIGN_GREATER_THAN
               _sign_greater_than(token)
-            when :sign_func
+            when AbsTokenType::SIGN_FUNC
               _sign_func(token)
             when :parenthesis
               _parenthesis(token)
-            when :loop_start
+            when AbsTokenType::LOOP_BEGIN
               _loop_start(token)
-            when :program_end
+            when AbsTokenType::PROGRAM_END
               _program_end(token)
-            when :loop_end
+            when AbsTokenType::LOOP_END
               _loop_end(token)
-            when :if_condition
+            when AbsTokenType::IF_CONDITION
               _if_condition(token)
-            when :wait
+            when AbsTokenType::WAIT
               _wait(token)
             else
               rem_token = AbstractToken::Remark.new(

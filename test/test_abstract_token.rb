@@ -10,7 +10,7 @@ class TestAbstractToken < Minitest::Test
 
     # let_token = ImgToScript::AbstractToken::AssignValue.new(expression: "X=X+1", require_nl: false)
     # cls_token = ImgToScript::AbstractToken::ClearScreen.new(require_nl: false)
-    # data_token = ImgToScript::AbstractToken::DataStorage.new(data: ["a"], require_nl: false)
+    # data_token = ImgToScript::AbstractToken::DataStore.new(data: ["a"], require_nl: false)
     # goto_token = ImgToScript::AbstractToken::GoTo.new(line: ImgToScript::CurrentLinePlaceholder.new(-70),
     #                                                   require_nl: true)
     # draw = ImgToScript::AbstractToken::DrawLineByAbsCoords.new(x0: 10, y0: 20, x1: 30, y1: 40, require_nl: false)
@@ -58,7 +58,7 @@ class TestAbstractToken < Minitest::Test
 
     image = Magick::BinMagick::Image.from_file(__dir__ << "/data/test_0.png")
     abs = ImgToScript::Generator::Segmental::DataReadDraw::Vertical.new.generate(image: image, scr_height: 64,
-                                                                           scr_width: 120)
+                                                                                 scr_width: 120)
 
     # abs.append(goto_token1)
 

@@ -9,7 +9,7 @@ module ImgToScript
       attr_reader :line
 
       def initialize(line:, **)
-        @type = :go_to
+        @type = AbsTokenType::GO_TO
         @line = line
 
         super
