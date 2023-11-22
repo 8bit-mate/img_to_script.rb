@@ -6,7 +6,7 @@ require "rmagick/bin_magick"
 
 class TestAbstractToken < Minitest::Test
   def test_cls
-    image = Magick::BinMagick::Image.from_file(__dir__ << "/data/test_2.png")
+    Magick::BinMagick::Image.from_file(__dir__ << "/data/test_2.png")
 
     # let_token = ImgToScript::AbstractToken::AssignValue.new(expression: "X=X+1", require_nl: false)
     # cls_token = ImgToScript::AbstractToken::ClearScreen.new(require_nl: false)
@@ -24,9 +24,9 @@ class TestAbstractToken < Minitest::Test
 
     # p form.format(trans.translate(arr))
 
-    # abs = ImgToScript::Generator::RunLengthEncoding::Horizontal.new.generate(image: image, scr_height: 64, scr_width: 120)
-    # toks = ImgToScript::Language::MK90Basic::Translator::MK90Basic20.new.translate(abs)
-    # puts ImgToScript::Language::MK90Basic::Formatter::Minificator.new.format(toks)
+    # abs = ImgToScript::Generators::RunLengthEncoding::Horizontal.new.generate(image: image, scr_height: 64, scr_width: 120)
+    # toks = ImgToScript::Languages::MK90Basic::Translator::MK90Basic20.new.translate(abs)
+    # puts ImgToScript::Languages::MK90Basic::Formatter::Minificator.new.format(toks)
   end
 
   def test_tmp
@@ -50,20 +50,20 @@ class TestAbstractToken < Minitest::Test
     #   require_nl: false
     # )
 
-    toks = ImgToScript::Language::MK90Basic::Translator::MK90Basic10.new.translate(
+    toks = ImgToScript::Languages::MK90Basic::Translator::MK90Basic10.new.translate(
       [let_token, goto_token1]
     )
 
-    p ImgToScript::Language::MK90Basic::Formatter::Minificator.new.format(toks)
+    p ImgToScript::Languages::MK90Basic::Formatter::Minificator.new.format(toks)
 
     image = Magick::BinMagick::Image.from_file(__dir__ << "/data/test_0.png")
-    abs = ImgToScript::Generator::Segmental::DataReadDraw::Vertical.new.generate(image: image, scr_height: 64,
-                                                                                 scr_width: 120)
+    abs = ImgToScript::Generators::RunLengthEncoding::Vertical.new.generate(image: image, scr_height: 64,
+                                                                            scr_width: 120)
 
     # abs.append(goto_token1)
 
-    toks = ImgToScript::Language::MK90Basic::Translator::MK90Basic10.new.translate(abs)
-    form = ImgToScript::Language::MK90Basic::Formatter::Minificator.new.configure do |config|
+    toks = ImgToScript::Languages::MK90Basic::Translator::MK90Basic10.new.translate(abs)
+    form = ImgToScript::Languages::MK90Basic::Formatter::Minificator.new.configure do |config|
       config.line_step = 1
       config.line_offset = 1
     end

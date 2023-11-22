@@ -14,14 +14,15 @@ module ImgToScript
   # Thus, at the generation step a placeholder is being used to mark
   # the current line number.
   #
-  # Placeholders' job it to tell the formatter that the argument
+  # Placeholder's job is to tell the formatter that the argument
   # should be replaced with the actual line number value.
   #
-  # The optional attribute 'shift' allows use a relative jump from
-  # the current line to a line that is above (a negative value) or
-  # to a line that's behind (a positive value) of the current line.
+  # The optional attribute 'shift' allows to make a relative jump
+  # from the current line to a line that is above (a negative value)
+  # or to a line that's behind (a positive value) of the current line.
   #
-  # Shift value is in steps, i.e. works as a coefficient.
+  # Shift value is in line steps, i.e. works as a coefficient, so the
+  # full form of the expression is: N GOTO N + m * line_step.
   #
   class CurrentLinePlaceholder
     attr_reader :shift

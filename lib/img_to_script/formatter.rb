@@ -10,5 +10,25 @@ module ImgToScript
   # A formatter's responsibility is to label BASIC lines, put
   # separators between the statements' and their arguments, etc.
   #
-  class Formatter; end
+  class Formatter
+    attr_reader :script
+
+    include Dry::Configurable
+
+    #
+    # Format an array of the language tokens to an executable script.
+    #
+    # @param [Array<Object>] tokens
+    #   Translator's output.
+    #
+    # @param [Hash{ Symbol => Object }] **kwargs
+    #   Additional options.
+    #
+    # @return [Array<String>]
+    #   Formatted script.
+    #
+    def format(tokens, **kwargs)
+      _format(tokens, kwargs)
+    end
+  end
 end

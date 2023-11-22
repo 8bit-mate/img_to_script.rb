@@ -6,13 +6,11 @@ module ImgToScript
     # If condition.
     #
     class IfCondition < AbstractToken
-      attr_reader :left, :operator, :right, :consequent
+      attr_reader :expression, :consequent
 
-      def initialize(left:, operator:, right:, consequent:, **)
+      def initialize(expression:, consequent:, **)
         @type = AbsTokenType::IF_CONDITION
-        @left = left
-        @operator = operator
-        @right = right
+        @expression = expression
         @consequent = consequent
 
         super

@@ -18,6 +18,7 @@ module ImgToScript
     LOOP_BEGIN = :loop_begin
     LOOP_END = :loop_end
     MATH_ADD = :math_add
+    MATH_GREATER_THAN = :math_greater_than
     MATH_MULT = :math_mult
     MATH_SUB = :math_sub
     MOVE_POINT_TO_ABS_COORDS = :move_point_to_abs_coords
