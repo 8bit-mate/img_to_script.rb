@@ -8,9 +8,19 @@ module ImgToScript
   # statements.
   #
   class Translator
-    def translate(input)
+    #
+    # Translate the abstract tokens to the target language tokens.
+    #
+    # @param [Array<AbstractToken>] abstract_tokens
+    #
+    # @param [Hash{ Symbol => Object }] **kwargs
+    #   Options.
+    #
+    # @return [Array<Object>]
+    #
+    def translate(abstract_tokens, **kwargs)
       _translate(
-        Array(input)
+        Array(abstract_tokens, **kwargs)
       )
     end
   end

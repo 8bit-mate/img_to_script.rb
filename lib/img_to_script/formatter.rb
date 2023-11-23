@@ -22,13 +22,13 @@ module ImgToScript
     #   Translator's output.
     #
     # @param [Hash{ Symbol => Object }] **kwargs
-    #   Additional options.
+    #   Options.
     #
     # @return [Array<String>]
     #   Formatted script.
     #
     def format(tokens, **kwargs)
-      _format(tokens, kwargs)
+      _format(tokens, **kwargs)
     end
   end
 end

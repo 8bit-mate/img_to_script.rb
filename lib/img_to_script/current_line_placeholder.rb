@@ -14,8 +14,8 @@ module ImgToScript
   # Thus, at the generation step a placeholder is being used to mark
   # the current line number.
   #
-  # Placeholder's job is to tell the formatter that the argument
-  # should be replaced with the actual line number value.
+  # Placeholder's job is to tell a formatter that the argument should
+  # be replaced with the actual line number value.
   #
   # The optional attribute 'shift' allows to make a relative jump
   # from the current line to a line that is above (a negative value)

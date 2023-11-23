@@ -16,7 +16,7 @@ module ImgToScript
 
           private
 
-          def _translate(abstract_tokens)
+          def _translate(abstract_tokens, **)
             result = []
 
             abstract_tokens.each do |token|
