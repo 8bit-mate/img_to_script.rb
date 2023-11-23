@@ -9,7 +9,7 @@ module ImgToScript
         #
         # Both v.1.0 & v.2.0 share the same syntax, but there are small
         # differences. This differences are defined in the child classes
-        # MK90Basic10 < MK90Basic & MK90Basic20 < MK90Basic.
+        # MK90Basic10 & MK90Basic20.
         #
         class Translator < ImgToScript::Translator
           include Mixin

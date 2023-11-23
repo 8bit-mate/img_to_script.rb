@@ -56,7 +56,7 @@ class TestAbstractToken < Minitest::Test
 
     p ImgToScript::Languages::MK90Basic::Formatter::Minificator.new.format(toks)
 
-    image = Magick::BinMagick::Image.from_file(__dir__ << "/data/test_0.png")
+    image = Magick::BinMagick::Image.from_file(__dir__ << "/data/test_1.png")
     abs = ImgToScript::Generators::RunLengthEncoding::Vertical.new.generate(image: image, scr_height: 64,
                                                                             scr_width: 120)
 
@@ -68,5 +68,9 @@ class TestAbstractToken < Minitest::Test
       config.line_offset = 1
     end
     puts form.format(toks)
+
+
+    puts ImgToScript::Task.new.call(image: image, scr_height: 64,
+                                 scr_width: 120)
   end
 end

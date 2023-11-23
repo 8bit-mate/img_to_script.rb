@@ -30,7 +30,7 @@ module ImgToScript
       # @param [Integer] scr_height
       #   Target device vertical screen resolution.
       #
-      # @return [Array<AbstractToken>]
+      # @return [Array<AbstractToken>] @tokens
       #
       def generate(image:, scr_width:, scr_height:)
         @image = image
