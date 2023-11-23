@@ -3,7 +3,7 @@
 module ImgToScript
   module Generators
     #
-    # Base class for generators.
+    # Base class.
     #
     class Generator
       include Dry::Configurable
@@ -12,8 +12,8 @@ module ImgToScript
       setting :y_offset, default: 0
       setting :clear_screen, default: true
       setting :pause_program, default: true
-      setting AbsTokenType::PROGRAM_BEGIN, default: false
-      setting AbsTokenType::PROGRAM_END, default: false
+      setting :program_begin, default: false
+      setting :program_end, default: false
 
       WAIT_LOOP_COUNT = 100
       WAIT_TIME = 1024
