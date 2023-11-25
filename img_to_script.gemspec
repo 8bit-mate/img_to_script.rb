@@ -5,11 +5,11 @@ require_relative "lib/img_to_script/version"
 Gem::Specification.new do |spec|
   spec.name = "img_to_script"
   spec.version = ImgToScript::VERSION
-  spec.authors = ["8bit-m8"]
+  spec.authors = ["8bit-mate"]
   spec.email = ["you@example.com"]
 
   spec.summary = "Converts images to executable scripts."
-  spec.homepage = "https://github.com/"
+  spec.homepage = "https://github.com/8bit-mate/img_to_script"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.0.0"
 
@@ -27,6 +27,7 @@ Gem::Specification.new do |spec|
         f.start_with?(*%w[bin/ test/ spec/ features/ .git .circleci appveyor Gemfile])
     end
   end
+  spec.files -= ["data/lain-mk90.jpg"]
 
   spec.bindir = "exe"
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
