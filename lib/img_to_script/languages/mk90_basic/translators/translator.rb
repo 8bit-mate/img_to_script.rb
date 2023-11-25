@@ -3,7 +3,7 @@
 module ImgToScript
   module Languages
     module MK90Basic
-      module Translator
+      module Translators
         #
         # Translates abstract tokens to the MK90 BASIC statements.
         #

@@ -3,7 +3,7 @@
 module ImgToScript
   module Languages
     module MK90Basic
-      module Translator
+      module Translators
         # rubocop:disable Metrics/ModuleLength
 
         #

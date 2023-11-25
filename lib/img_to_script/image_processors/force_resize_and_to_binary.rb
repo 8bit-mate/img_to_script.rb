@@ -5,7 +5,9 @@ module ImgToScript
     #
     # Crops image and converts to binary.
     #
-    class ForceResizeAndToBinary
+    class ForceResizeAndToBinary < ImageProcessor
+      private
+
       #
       # Call image processor.
       #
@@ -17,7 +19,7 @@ module ImgToScript
       #
       # @return [Magick::BinMagick::Image] @image
       #
-      def call(image:, scr_width:, scr_height:)
+      def _call(image:, scr_width:, scr_height:, **)
         @image = image
 
         _resize_image if @image.oversize?(scr_width, scr_height)
@@ -25,8 +27,6 @@ module ImgToScript
 
         @image
       end
-
-      private
 
       #
       # Forcibly resize the image if it doesn't fit to the MK90's screen resolution.

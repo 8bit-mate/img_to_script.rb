@@ -3,9 +3,9 @@
 module ImgToScript
   module Languages
     module MK90Basic
-      module Formatter
+      module Formatters
         #
-        # The aim of the minificator is to make the ouput as compact as
+        # The aim of the minificator is to make the output as compact as
         # possible, and so to save space at the MPO-10 cart.
         #
         # The minificator:

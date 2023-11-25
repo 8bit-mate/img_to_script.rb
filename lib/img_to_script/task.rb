@@ -8,8 +8,8 @@ module ImgToScript
     include Import[
       generator: "generators.hex_mask.enhanced",
       image_processor: "image_processors.force_resize_and_to_binary",
-      translator: "languages.mk90_basic.translator.mk90_basic_10",
-      formatter: "languages.mk90_basic.formatter.minificator"
+      translator: "languages.mk90_basic.translators.mk90_basic_10",
+      formatter: "languages.mk90_basic.formatters.minificator"
     ]
 
     def run(image:, scr_width:, scr_height:, **)

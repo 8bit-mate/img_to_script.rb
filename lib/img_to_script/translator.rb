@@ -23,5 +23,9 @@ module ImgToScript
         Array(abstract_tokens, **kwargs)
       )
     end
+
+    private
+
+    def _translate(*); end
   end
 end

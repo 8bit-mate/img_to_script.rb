@@ -3,7 +3,7 @@
 module ImgToScript
   module Languages
     module MK90Basic
-      module Formatter
+      module Formatters
         #
         # MK90 BASIC formatter base class.
         #
