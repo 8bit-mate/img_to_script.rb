@@ -124,7 +124,7 @@ script = task.run(
 
 - **ImgToScript::ImageProcessors::ForceResizeAndToBinary**
 
-   Forcibly crops image to the provided dimensions, forcibly converts image to a binary format.
+   Forcibly resizes the image to the provided dimensions, when converts image to a binary format.
 
 - **ImgToScript::ImageProcessors::PassAsIs**
 

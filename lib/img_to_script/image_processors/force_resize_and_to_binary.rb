@@ -3,7 +3,7 @@
 module ImgToScript
   module ImageProcessors
     #
-    # Crops image and converts to binary.
+    # Resizes the image and converts to binary.
     #
     class ForceResizeAndToBinary < ImageProcessor
       private
@@ -22,7 +22,7 @@ module ImgToScript
       def _call(image:, scr_width:, scr_height:, **)
         @image = image
 
-        _resize_image if @image.oversize?(scr_width, scr_height)
+        _resize_image(scr_width, scr_height) if @image.oversize?(scr_width, scr_height)
         _to_binary unless @image.binary?
 
         @image
