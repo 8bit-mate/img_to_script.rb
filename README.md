@@ -195,7 +195,7 @@ script = task.run(
 
 - **ImgToScript::Generators::RunLengthEncoding::Vertical**
 
-   RLE, vertical vertical lines.
+   RLE, vertical scan lines.
 
 - **ImgToScript::Generators::Segmental::DirectDraw::Horizontal**
 
