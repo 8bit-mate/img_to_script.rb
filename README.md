@@ -101,7 +101,7 @@ task = ImgToScript::Task.new(
 
 Note that you can also provide your own custom objects as long as they respond to the required public interface.
 
-In case of the Elektronika MK90 BASIC you can omit any dependency (i.e. skip any step from the 2nd to the 5th), since these are optional arguments. When a default object with a default configuration will be used.
+In case of the Elektronika MK90 BASIC you can omit any dependency (i.e. skip any step from the 2nd to the 5th), since these are optional arguments. Then a default object with a default configuration will be used.
 
 You can also re-configure any dependency of an existing task object, e.g.:
 
