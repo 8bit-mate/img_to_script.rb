@@ -268,7 +268,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/8bit-mate/img_to_script.
+Bug reports and pull requests are welcome on GitHub at https://github.com/8bit-mate/img_to_script.rb.
 
 ## License
 

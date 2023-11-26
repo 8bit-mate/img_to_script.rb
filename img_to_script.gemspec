@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email = ["you@example.com"]
 
   spec.summary = "Converts images to executable scripts."
-  spec.homepage = "https://github.com/8bit-mate/img_to_script"
+  spec.homepage = "https://github.com/8bit-mate/img_to_script.rb"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.0.0"
 
