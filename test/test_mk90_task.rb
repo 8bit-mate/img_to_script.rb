@@ -17,7 +17,7 @@ class TestMk90Task < Minitest::Test
   end
 
   def test_hex_mask_enhanced_all_white_px
-    image = Magick::BinMagick::Image.from_file(__dir__ << "/data/test_2.png")
+    image = Magick::BinMagick::Image.from_file(__dir__ << "/data/test_2.png").to_binary!
 
     script = _task.run(
       image: image,
@@ -29,7 +29,7 @@ class TestMk90Task < Minitest::Test
   end
 
   def test_hex_mask_enhanced_all_black_px
-    image = Magick::BinMagick::Image.from_file(__dir__ << "/data/test_3.png")
+    image = Magick::BinMagick::Image.from_file(__dir__ << "/data/test_3.png").to_binary!
 
     script = _task.run(
       image: image,
@@ -39,9 +39,9 @@ class TestMk90Task < Minitest::Test
 
     assert_equal ["1FORI=1TO960:DRAWMFF:NEXTI"], script
   end
-  
+
   def test_custom_task
-    image = Magick::BinMagick::Image.from_file(__dir__ << "/data/test_5.png")
+    image = Magick::BinMagick::Image.from_file(__dir__ << "/data/test_5.png").to_binary!
 
     generator = ImgToScript::Generators::Segmental::DirectDraw::Horizontal.new.configure do |config|
       config.x_offset = 10

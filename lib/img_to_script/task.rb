@@ -7,7 +7,6 @@ module ImgToScript
   class Task
     include Import[
       generator: "generators.hex_mask.enhanced",
-      image_processor: "image_processors.force_resize_and_to_binary",
       translator: "languages.mk90_basic.translators.mk90_basic_10",
       formatter: "languages.mk90_basic.formatters.minificator"
     ]
@@ -16,11 +15,7 @@ module ImgToScript
       @formatter.format(
         @translator.translate(
           @generator.generate(
-            image: @image_processor.call(
-              image: image,
-              scr_width: scr_width,
-              scr_height: scr_height
-            ),
+            image: image,
             scr_width: scr_width,
             scr_height: scr_height
           )
