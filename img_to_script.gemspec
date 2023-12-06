@@ -36,4 +36,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "dry-system", "~> 1.0", ">= 1.0.1"
   spec.add_dependency "run_length_encoding_rb", "~> 1.0", ">= 1.0.0"
   spec.add_dependency "zeitwerk", "~> 2.6", ">= 2.6.12"
+
+  spec.add_development_dependency "rmagick-bin_magick", "~> 0.2", ">= 0.2.0"
 end
