@@ -162,11 +162,11 @@ script = task.run(
 
       Add a statement to pause the program at the end of the script.
 
-   - program_begin, default: PRORGAM_BEGIN_LBL (false)
+   - program_begin_lbl, default: PRORGAM_BEGIN_LBL (false)
 
       Add a statement that marks the begin of the program.
 
-   - program_end, default: PROGRAM_END_LBL (false)
+   - program_end_lbl, default: PROGRAM_END_LBL (false)
 
       Add a statement that marks the end of the program.
 
