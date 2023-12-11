@@ -23,8 +23,8 @@ module ImgToScript
     MATH_SUB = :math_sub
     MOVE_POINT_TO_ABS_COORDS = :move_point_to_abs_coords
     PARENTHESES = :parentheses
-    PROGRAM_BEGIN = :program_begin
-    PROGRAM_END = :program_end
+    PROGRAM_BEGIN = :program_begin_lbl
+    PROGRAM_END_LBL = :program_end_lbl
     REMARK = :remark
     SIGN_FUNC = :sign_func
     SIGN_GREATER_THAN = :sign_greater_than

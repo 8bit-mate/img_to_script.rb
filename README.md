@@ -146,27 +146,27 @@ script = task.run(
 
    **Configuration options**:
 
-   - x_offset, default: 0
+   - x_offset, default: X_OFFSET (0)
 
       Offset the X point on the screen.
 
-   - y_offset, default: 0
+   - y_offset, default: Y_OFFSET (0)
 
       Offset the Y point on the screen.
 
-   - clear_screen, default: true
+   - clear_screen, default: CLEAR_SCREEN (true)
 
       Add a statement to clear the screen at the begin of the script.
 
-   - pause_program, default: true
+   - pause_program, default: PAUSE_PROGRAM (true)
 
       Add a statement to pause the program at the end of the script.
 
-   - program_begin, default: false
+   - program_begin, default: PRORGAM_BEGIN_LBL (false)
 
       Add a statement that marks the begin of the program.
 
-   - program_end, default: false
+   - program_end, default: PROGRAM_END_LBL (false)
 
       Add a statement that marks the end of the program.
 
@@ -238,11 +238,11 @@ script = task.run(
 
    **Configuration options**:
 
-   - line_offset, default: DEF_LINE_OFFSET (1)
+   - line_offset, default: LINE_OFFSET (1)
 
       First BASIC line number.
 
-   - line_step, default: DEF_LINE_STEP (1)
+   - line_step, default: LINE_STEP (1)
 
       Step between two neighbor BASIC lines.
 

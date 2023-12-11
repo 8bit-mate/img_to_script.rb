@@ -8,18 +8,15 @@ module ImgToScript
     class Generator
       include Dry::Configurable
 
-      setting :x_offset, default: 0
-      setting :y_offset, default: 0
-      setting :clear_screen, default: true
-      setting :pause_program, default: true
-      setting :program_begin, default: false
-      setting :program_end, default: false
-
-      WAIT_LOOP_COUNT = 100
-      WAIT_TIME = 1024
+      setting :x_offset, default: X_OFFSET
+      setting :y_offset, default: Y_OFFSET
+      setting :clear_screen, default: CLEAR_SCREEN
+      setting :pause_program, default: PAUSE_PROGRAM
+      setting :program_begin_lbl, default: PRORGAM_BEGIN_LBL
+      setting :program_end_lbl, default: PROGRAM_END_LBL
 
       #
-      # Generate abstract tokens that render the image.
+      # Generate abstract tokens that represent the image.
       #
       # @param [Magick::BinMagick::Image] image
       #   Binary image.
@@ -49,11 +46,11 @@ module ImgToScript
       def _generate_tokens
         @tokens = [] # append new tokens here
 
-        _program_begin if config.program_begin
+        _program_begin if config.program_begin_lbl
         _clear_screen if config.clear_screen
         _generate
         _program_pause if config.pause_program
-        _program_end if config.program_end
+        _program_end if config.program_end_lbl
       end
 
       #

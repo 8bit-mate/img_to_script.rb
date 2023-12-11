@@ -62,7 +62,7 @@ module ImgToScript
               _parentheses(token)
             when AbsTokenType::LOOP_BEGIN
               _loop_begin(token)
-            when AbsTokenType::PROGRAM_END
+            when AbsTokenType::PROGRAM_END_LBL
               _program_end(token)
             when AbsTokenType::LOOP_END
               _loop_end(token)

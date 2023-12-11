@@ -8,8 +8,8 @@ module ImgToScript
         # MK90 BASIC formatter base class.
         #
         class Formatter < ImgToScript::Formatter
-          setting :line_offset, default: DEF_LINE_OFFSET
-          setting :line_step, default: DEF_LINE_STEP
+          setting :line_offset, default: LINE_OFFSET
+          setting :line_step, default: LINE_STEP
           setting :max_chars_per_line, default: MAX_CHARS_PER_LINE
           setting :number_lines, default: true
 

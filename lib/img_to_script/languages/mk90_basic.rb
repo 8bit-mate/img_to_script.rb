@@ -10,8 +10,8 @@ module ImgToScript
       SCR_HEIGHT = 64
       MAX_CHARS_PER_LINE = 80
 
-      DEF_LINE_OFFSET = 1
-      DEF_LINE_STEP = 1
+      LINE_OFFSET = 1
+      LINE_STEP = 1
     end
   end
 end

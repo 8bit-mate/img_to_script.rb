@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    img_to_script (0.1.0)
+    img_to_script (0.2.0)
       dry-system (~> 1.0, >= 1.0.1)
       run_length_encoding_rb (~> 1.0, >= 1.0.0)
       zeitwerk (~> 2.6, >= 2.6.12)
@@ -33,11 +33,16 @@ GEM
     parser (3.2.2.4)
       ast (~> 2.4.1)
       racc
+    pkg-config (1.5.5)
     racc (1.7.1)
     rainbow (3.1.1)
     rake (13.1.0)
     regexp_parser (2.8.2)
     rexml (3.2.6)
+    rmagick (5.3.0)
+      pkg-config (~> 1.4)
+    rmagick-bin_magick (0.2.0)
+      rmagick (~> 5.2, >= 5.2.0)
     rubocop (1.57.2)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
@@ -63,6 +68,7 @@ DEPENDENCIES
   img_to_script!
   minitest (~> 5.0)
   rake (~> 13.0)
+  rmagick-bin_magick (~> 0.2, >= 0.2.0)
   rubocop (~> 1.21)
 
 BUNDLED WITH
