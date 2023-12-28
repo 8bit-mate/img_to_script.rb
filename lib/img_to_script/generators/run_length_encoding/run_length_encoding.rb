@@ -82,7 +82,7 @@ module ImgToScript
           @tokens.append(
             AbstractToken::IfCondition.new(
               expression: expression,
-              consequent: CurrentLinePlaceholder.new(3),
+              consequent: CurrentLinePlaceholder.new(4),
               require_nl: true
             )
           )
