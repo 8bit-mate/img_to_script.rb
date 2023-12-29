@@ -70,7 +70,7 @@ module ImgToScript
         #
         # The IF statement is used to check cases where the line would extend
         # beyond the bounds of the image/screen. In this case the program jumps
-        # to the 5-th line (3 lines down from the current line) of the decoder,
+        # to the 5-th line (4 lines down from the current line) of the decoder,
         # that handles this edge case.
         #
         def _dec_line02
